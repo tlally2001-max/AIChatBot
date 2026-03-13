@@ -20,19 +20,31 @@ export async function scrapeWebsite(url: string): Promise<ScrapedData> {
     }
 
     const controller = new AbortController()
-    const timeoutId = setTimeout(() => controller.abort(), 10000)
+    const timeoutId = setTimeout(() => controller.abort(), 15000)
 
-    const response = await fetch(fullUrl, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-      },
-      signal: controller.signal,
-    })
+    console.log(`📡 Fetching ${fullUrl} with timeout 15s`)
+
+    let response
+    try {
+      response = await fetch(fullUrl, {
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+        },
+        signal: controller.signal,
+      })
+    } catch (fetchError) {
+      clearTimeout(timeoutId)
+      const errorMsg = fetchError instanceof Error ? fetchError.message : 'Unknown fetch error'
+      console.error(`❌ Fetch error for ${fullUrl}: ${errorMsg}`)
+      throw new Error(`Network error: ${errorMsg}. Website may be blocking requests or unreachable.`)
+    }
 
     clearTimeout(timeoutId)
 
+    console.log(`📊 Got response: ${response.status} ${response.statusText}`)
+
     if (!response.ok) {
-      throw new Error(`Failed to fetch: ${response.statusText}`)
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`)
     }
 
     const html = await response.text()
@@ -86,9 +98,8 @@ export async function scrapeWebsite(url: string): Promise<ScrapedData> {
       bodyText,
     }
   } catch (error) {
-    console.error('Scrape error:', error)
-    throw new Error(
-      `Failed to scrape website: ${error instanceof Error ? error.message : 'Unknown error'}`
-    )
+    const errMsg = error instanceof Error ? error.message : String(error)
+    console.error(`❌ Scrape error: ${errMsg}`)
+    throw new Error(errMsg)
   }
 }
