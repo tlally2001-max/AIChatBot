@@ -35,13 +35,24 @@ export async function POST(request: NextRequest) {
     const webhookUrl = `${process.env.NEXT_PUBLIC_APP_URL}/api/voice/lead-webhook`
     const vapiConfig = createVapiAgentConfig(businessProfile, webhookUrl)
 
+    // Format phone number to E.164 format (e.g., +17253739952)
+    let e164Phone = prospectEmail
+    if (!e164Phone.startsWith('+')) {
+      e164Phone = '+1' + e164Phone.replace(/\D/g, '') // Add +1 for US and remove non-digits
+    } else {
+      e164Phone = '+' + e164Phone.replace(/\D/g, '') // Keep + and remove non-digits
+    }
+
+    console.log('📱 Formatted phone number to E.164:', e164Phone)
+
     // Call Vapi API to create phone number and start voice session
-    // phoneNumber must be an object with the phone number details
+    // phoneNumber must be an object with Twilio credentials
     const vapiPayload = {
       phoneNumberId: process.env.VAPI_PHONE_NUMBER_ID,
       assistantId: process.env.VAPI_ASSISTANT_ID,
       phoneNumber: {
-        number: prospectEmail, // Phone number in E.164 format or standard format
+        twilioPhoneNumber: e164Phone,
+        twilioAccountSid: process.env.TWILIO_ACCOUNT_SID || undefined,
       },
       assistantOverrides: {
         firstMessage: `Hi ${prospectName || 'there'}, I'm Emma with ${businessProfile.businessName || 'the team'}. How can I help you today?`,
