@@ -32,6 +32,7 @@ export async function sendPersonalizedDemoEmail(params: EmailParams): Promise<st
     demoUrl,
     businessProfile,
     demoToken,
+    appUrl,
   })
 
   try {
@@ -63,8 +64,9 @@ function generateEmailHTML(params: {
   demoUrl: string
   businessProfile: BusinessProfile
   demoToken: string
+  appUrl: string
 }): string {
-  const { clientName, businessName, demoUrl, businessProfile, demoToken } = params
+  const { clientName, businessName, demoUrl, businessProfile, demoToken, appUrl } = params
 
   return `
     <!DOCTYPE html>
