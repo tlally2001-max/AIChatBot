@@ -177,13 +177,75 @@ export default function DemoPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       {!demoStarted ? (
-        <DemoStarter
-          business={businessProfile}
-          demoToken={demoToken}
-          prospectEmail={prospectEmail || undefined}
-          prospectName={prospectName || undefined}
-          onDemoStart={handleDemoStart}
-        />
+        <div className="flex items-center justify-between min-h-screen p-8 gap-8">
+          <div className="flex-1 flex items-center justify-center">
+            <DemoStarter
+              business={businessProfile}
+              demoToken={demoToken}
+              prospectEmail={prospectEmail || undefined}
+              prospectName={prospectName || undefined}
+              onDemoStart={handleDemoStart}
+            />
+          </div>
+          <div className="flex-1 hidden lg:flex items-center justify-center">
+            {/* iPhone Mockup */}
+            <div className="relative w-80">
+              <div className="relative bg-black rounded-3xl shadow-2xl overflow-hidden" style={{ aspectRatio: '9/19' }}>
+                {/* Notch */}
+                <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-44 h-8 bg-black rounded-b-3xl z-50 flex items-center justify-center gap-1">
+                  <span className="text-gray-600 text-xs">📶</span>
+                  <span className="text-gray-600 text-xs">📡</span>
+                  <span className="text-gray-600 text-xs flex-grow"></span>
+                  <span className="text-gray-600 text-xs">🔋</span>
+                </div>
+
+                {/* Screen Content */}
+                <div className="bg-white h-full pt-8 overflow-hidden flex flex-col">
+                  {/* Status Bar */}
+                  <div className="bg-white h-6 flex items-center justify-between px-6 text-xs font-semibold text-gray-800 border-b border-gray-100">
+                    <span>6:37</span>
+                    <span>Safari</span>
+                  </div>
+
+                  {/* URL Bar */}
+                  <div className="bg-gray-100 px-3 py-2 mx-2 mt-2 rounded-lg text-xs text-gray-600 truncate border border-gray-200">
+                    {businessProfile.url || 'yourwebsite.com'}
+                  </div>
+
+                  {/* Demo Preview Content */}
+                  <div className="flex-1 overflow-hidden bg-gradient-to-b from-blue-50 to-indigo-100 flex flex-col items-center justify-center p-4">
+                    <div className="text-center">
+                      <p className="text-sm font-bold text-gray-900 mb-2">
+                        {businessProfile.businessName}
+                      </p>
+                      <p className="text-xs text-gray-600 mb-4">
+                        Powered by AI Emma
+                      </p>
+                      <div className="bg-white rounded-lg shadow p-3 mb-4 text-xs">
+                        <p className="text-gray-900 mb-2">
+                          "Hi! How can I help you today?"
+                        </p>
+                        <div className="space-y-2">
+                          <button className="block w-full text-left text-blue-600 hover:underline text-xs p-1">
+                            Tell me about your services
+                          </button>
+                          <button className="block w-full text-left text-blue-600 hover:underline text-xs p-1">
+                            Schedule a demo
+                          </button>
+                        </div>
+                      </div>
+                      <p className="text-xs text-gray-500">
+                        💬 Start chatting →
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {/* Bottom bezel */}
+              <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-black rounded-full"></div>
+            </div>
+          </div>
+        </div>
       ) : demoSession?.session_type === 'chat' ? (
         // Chat Interface
         <div className="max-w-2xl mx-auto h-screen flex flex-col p-4">
