@@ -15,8 +15,10 @@
 - [x] **Vapi voice agent** - phone calls with function hooks
 - [x] Email automation with Resend
 - [x] Email tracking pixel
-- [x] Demo landing pages (iframe + Emma widget)
-- [x] Floating AI widget (chat/voice selector)
+- [x] Professional demo landing page (dark gradient, hero section)
+- [x] iPhone mockup showing scraped website in iframe
+- [x] Floating Emma chat widget with notification badge
+- [x] How It Works, Pricing, Features, FAQ sections
 - [x] Kanban pipeline dashboard (drag-drop, 4 columns)
 - [x] Demo tracking (all interactions logged)
 - [x] **Slack webhook integration** - real-time alerts
@@ -64,6 +66,7 @@ src/
 ├── app/login/page.tsx                 ← Auth
 ├── app/page.tsx                       ← Home (scrape form)
 ├── components/
+│   ├── DemoHeroPage.tsx               ← Professional demo landing (NEW!)
 │   ├── DemoLandingPage.tsx            ← Website preview + Emma
 │   ├── DemoStarter.tsx                ← Chat/voice selector
 │   ├── PipelineBoard.tsx              ← Kanban wrapper
@@ -153,7 +156,10 @@ Then:
 | Lead creation | ✅ Complete |
 | Email automation | ✅ Complete |
 | Email tracking | ✅ Complete |
-| Chat demo | ✅ Complete |
+| Professional demo landing page | ✅ Complete |
+| iPhone mockup with iframe | ✅ Complete |
+| Emma floating chat widget | ✅ Complete |
+| Chat with Claude AI | ✅ Complete |
 | Voice demo | ✅ Complete |
 | Pipeline dashboard | ✅ Complete |
 | Slack alerts | ✅ Complete |
