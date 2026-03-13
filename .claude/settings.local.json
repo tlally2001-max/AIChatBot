@@ -25,7 +25,14 @@
       "WebFetch(domain:www.getnextphone.com)",
       "WebFetch(domain:www.lindy.ai)",
       "WebFetch(domain:www.retellai.com)",
-      "Bash(cd \"C:\\\\Users\\\\tlall\\\\Desktop\\\\AI ChatWebClient\" && npx vercel --prod)"
+      "Bash(cd \"C:\\\\Users\\\\tlall\\\\Desktop\\\\AI ChatWebClient\" && npx vercel --prod)",
+      "Bash(sleep 3 && curl -s http://localhost:3000 | head -20)",
+      "Bash(sleep 4 && curl -s http://localhost:3000/api/health 2>&1 || echo \"Server not ready yet\")",
+      "Bash(sleep 5 && curl -s http://localhost:3000 2>&1 | head -30)",
+      "Bash(curl -v http://localhost:3000 2>&1 | head -50)",
+      "Bash(curl -s http://localhost:3007 | head -10)",
+      "Bash(curl -s \"http://localhost:3007/api/demo-business?businessName=TestBiz\" | head -20)",
+      "Bash(curl -X POST http://localhost:3008/api/voice/start \\\\\n  -H \"Content-Type: application/json\" \\\\\n  -d '{\"demoToken\":\"test\",\"prospectEmail\":\"test@example.com\",\"prospectName\":\"Test User\"}' 2>&1 | jq . || curl -X POST http://localhost:3008/api/voice/start \\\\\n  -H \"Content-Type: application/json\" \\\\\n  -d '{\"demoToken\":\"test\",\"prospectEmail\":\"test@example.com\",\"prospectName\":\"Test User\"}' 2>&1)"
     ]
   }
 }

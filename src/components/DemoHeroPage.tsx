@@ -29,6 +29,12 @@ export function DemoHeroPage({
   const [sending, setSending] = useState(false)
 
   const handleStartVoiceCall = async () => {
+    // Ask user for their phone number
+    const phoneNumber = prompt('📞 Enter your phone number to receive the call:\n(e.g., +1234567890 or 1234567890)')
+    if (!phoneNumber) {
+      return // User cancelled
+    }
+
     setVoiceLoading(true)
     try {
       const response = await fetch('/api/voice/start', {
@@ -36,19 +42,19 @@ export function DemoHeroPage({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           demoToken,
-          prospectEmail: clientName,
-          prospectName: clientName,
+          prospectEmail: phoneNumber,
+          prospectName: clientName || 'Guest',
         }),
       })
 
       if (!response.ok) {
         const data = await response.json()
-        alert(`Error: ${data.error || 'Failed to start voice call'}`)
+        alert(`❌ Error: ${data.error || 'Failed to start voice call'}`)
         return
       }
 
       const data = await response.json()
-      alert(`📞 Emma is calling you now!\n\nPhone: ${data.phoneNumber || 'Check your phone'}`)
+      alert(`📞 Emma is calling you now!\n\nCalling: ${phoneNumber}\n\nMake sure your phone is nearby!`)
 
       // Log voice start
       await fetch('/api/demo-tracking', {
@@ -57,12 +63,12 @@ export function DemoHeroPage({
         body: JSON.stringify({
           demoToken,
           event: 'voice_start',
-          metadata: { prospectName: clientName },
+          metadata: { prospectName: clientName || 'Guest', phoneNumber },
         }),
       }).catch(err => console.log('Tracking error:', err))
     } catch (error) {
       console.error('Voice call error:', error)
-      alert('Failed to start voice call. Please try again.')
+      alert('❌ Failed to start voice call. Please try again.')
     } finally {
       setVoiceLoading(false)
     }

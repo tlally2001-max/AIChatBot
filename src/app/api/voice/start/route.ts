@@ -4,8 +4,15 @@ import { createVapiAgentConfig } from '@/lib/emma-prompt'
 
 export async function POST(request: NextRequest) {
   try {
+    console.log('📞 Voice start request received')
     const supabase = await createClient()
     const { demoToken, prospectEmail, prospectName } = await request.json()
+
+    console.log('🔑 Checking environment variables:')
+    console.log('  - VAPI_API_KEY:', process.env.VAPI_API_KEY ? '✅ SET' : '❌ MISSING')
+    console.log('  - VAPI_PHONE_NUMBER_ID:', process.env.VAPI_PHONE_NUMBER_ID ? '✅ SET' : '❌ MISSING')
+    console.log('  - VAPI_ASSISTANT_ID:', process.env.VAPI_ASSISTANT_ID ? '✅ SET' : '❌ MISSING')
+    console.log('  - NEXT_PUBLIC_APP_URL:', process.env.NEXT_PUBLIC_APP_URL)
 
     if (!demoToken) {
       return NextResponse.json({ error: 'Demo token required' }, { status: 400 })
@@ -47,9 +54,15 @@ export async function POST(request: NextRequest) {
 
     if (!vapiResponse.ok) {
       const error = await vapiResponse.json()
-      console.error('Vapi API error:', error)
+      console.error('❌ Vapi API error:', error)
+      console.error('❌ Vapi response status:', vapiResponse.status)
+      console.error('❌ Config sent:', {
+        phoneNumberId: process.env.VAPI_PHONE_NUMBER_ID || 'MISSING',
+        customerNumber: prospectEmail || '+1234567890',
+        assistantId: process.env.VAPI_ASSISTANT_ID || 'MISSING',
+      })
       return NextResponse.json(
-        { error: 'Failed to initialize voice agent' },
+        { error: `Failed to initialize voice agent: ${error.message || JSON.stringify(error)}` },
         { status: 500 }
       )
     }
