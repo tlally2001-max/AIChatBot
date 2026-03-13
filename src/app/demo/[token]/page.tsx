@@ -209,7 +209,7 @@ export default function DemoPage() {
 
                   {/* URL Bar */}
                   <div className="bg-gray-100 px-3 py-2 mx-2 mt-2 rounded-lg text-xs text-gray-600 truncate border border-gray-200">
-                    {businessProfile.url || 'yourwebsite.com'}
+                    {businessProfile.websiteUrl || 'yourwebsite.com'}
                   </div>
 
                   {/* Demo Preview Content */}
