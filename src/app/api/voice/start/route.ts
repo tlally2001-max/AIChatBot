@@ -36,10 +36,13 @@ export async function POST(request: NextRequest) {
     const vapiConfig = createVapiAgentConfig(businessProfile, webhookUrl)
 
     // Call Vapi API to create phone number and start voice session
+    // phoneNumber must be an object with the phone number details
     const vapiPayload = {
       phoneNumberId: process.env.VAPI_PHONE_NUMBER_ID,
       assistantId: process.env.VAPI_ASSISTANT_ID,
-      phoneNumber: prospectEmail, // Phone number to call (corrected from customerNumber)
+      phoneNumber: {
+        number: prospectEmail, // Phone number in E.164 format or standard format
+      },
       assistantOverrides: {
         firstMessage: `Hi ${prospectName || 'there'}, I'm Emma with ${businessProfile.businessName || 'the team'}. How can I help you today?`,
       },
