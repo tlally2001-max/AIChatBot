@@ -8,8 +8,11 @@ export async function POST(request: NextRequest) {
     const { demoToken, prospectName } = await request.json()
 
     if (!demoToken) {
+      console.error('❌ No demo token provided')
       return NextResponse.json({ error: 'Demo token required' }, { status: 400 })
     }
+
+    console.log('🔍 Looking for lead with token:', demoToken)
 
     // Fetch the lead with business profile
     const { data: lead, error: fetchError } = await supabase
@@ -18,9 +21,17 @@ export async function POST(request: NextRequest) {
       .eq('demo_token', demoToken)
       .single()
 
-    if (fetchError || !lead) {
-      return NextResponse.json({ error: 'Lead not found' }, { status: 404 })
+    if (fetchError) {
+      console.error('❌ Supabase fetch error:', fetchError)
+      return NextResponse.json({ error: `Database error: ${fetchError.message}` }, { status: 500 })
     }
+
+    if (!lead) {
+      console.error('❌ Lead not found for token:', demoToken)
+      return NextResponse.json({ error: `Lead not found for token: ${demoToken}` }, { status: 404 })
+    }
+
+    console.log('✅ Lead found:', lead.business_name)
 
     const businessProfile = lead.business_profile || {}
 
