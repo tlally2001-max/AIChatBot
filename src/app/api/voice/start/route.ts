@@ -1,0 +1,78 @@
+import { NextRequest, NextResponse } from 'next/server'
+import { createClient } from '@/lib/supabase/server'
+import { createVapiAgentConfig } from '@/lib/emma-prompt'
+
+export async function POST(request: NextRequest) {
+  try {
+    const supabase = await createClient()
+    const { demoToken, prospectEmail, prospectName } = await request.json()
+
+    if (!demoToken) {
+      return NextResponse.json({ error: 'Demo token required' }, { status: 400 })
+    }
+
+    // Fetch the lead with business profile
+    const { data: lead, error: fetchError } = await supabase
+      .from('leads')
+      .select('*')
+      .eq('demo_token', demoToken)
+      .single()
+
+    if (fetchError || !lead) {
+      return NextResponse.json({ error: 'Lead not found' }, { status: 404 })
+    }
+
+    const businessProfile = lead.business_profile || {}
+
+    // Create Vapi agent configuration
+    const webhookUrl = `${process.env.NEXT_PUBLIC_APP_URL}/api/voice/lead-webhook`
+    const vapiConfig = createVapiAgentConfig(businessProfile, webhookUrl)
+
+    // Call Vapi API to create phone number and start voice session
+    const vapiResponse = await fetch('https://api.vapi.ai/call', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${process.env.VAPI_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        phoneNumberId: process.env.VAPI_PHONE_NUMBER_ID || undefined,
+        customerNumber: prospectEmail || '+1234567890',
+        assistantId: process.env.VAPI_ASSISTANT_ID || undefined,
+        assistantOverrides: {
+          firstMessage: `Hi ${prospectName || 'there'}, I'm Emma with ${businessProfile.businessName || 'the team'}. How can I help you today?`,
+        },
+      }),
+    })
+
+    if (!vapiResponse.ok) {
+      const error = await vapiResponse.json()
+      console.error('Vapi API error:', error)
+      return NextResponse.json(
+        { error: 'Failed to initialize voice agent' },
+        { status: 500 }
+      )
+    }
+
+    const vapiSession = await vapiResponse.json()
+
+    // Log the demo session start
+    await supabase.from('demo_sessions').insert({
+      lead_id: lead.id,
+      session_type: 'voice',
+      vapi_session_id: vapiSession.id,
+      status: 'started',
+      started_at: new Date().toISOString(),
+    })
+
+    return NextResponse.json({
+      sessionId: vapiSession.id,
+      assistantId: vapiSession.assistantId,
+      phoneNumber: vapiSession.phoneNumber,
+      greeting: `Hi ${prospectName || 'there'}, I'm Emma with ${businessProfile.businessName || 'the team'}. How can I help you today?`,
+    })
+  } catch (error) {
+    console.error('Voice start error:', error)
+    return NextResponse.json({ error: 'Failed to start voice session' }, { status: 500 })
+  }
+}

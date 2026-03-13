@@ -1,0 +1,30 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cd \"/c/Users/tlall/Desktop/AI ChatWebClient\" && npm init -y)",
+      "Bash(cd \"/c/Users/tlall/Desktop/AI ChatWebClient\" && npx create-next-app@latest . --typescript --tailwind --app --src-dir --import-alias \"@/*\" --eslint --no-git)",
+      "Bash(cd \"/c/Users/tlall/Desktop/AI ChatWebClient\" && rm package.json && npx create-next-app@latest . --typescript --tailwind --app --src-dir --import-alias \"@/*\" --eslint --no-git)",
+      "Read(//c/Users/tlall/Desktop/**)",
+      "Bash(npx create-next-app@latest demo-drop --typescript --tailwind --app --src-dir --import-alias \"@/*\" --eslint --no-git)",
+      "Bash(cd /c/Users/tlall/Desktop && echo \"No\" | npx create-next-app@latest demo-drop --typescript --tailwind --app --src-dir --import-alias \"@/*\" --eslint --no-git)",
+      "Bash(cd /c/Users/tlall/Desktop && cp -r demo-drop/* \"AI ChatWebClient/\" && cp demo-drop/.* \"AI ChatWebClient/\" 2>/dev/null || true && rm -rf demo-drop)",
+      "Bash(cd \"/c/Users/tlall/Desktop/AI ChatWebClient\" && npm install @supabase/supabase-js @supabase/ssr cheerio resend @dnd-kit/core @dnd-kit/sortable @dnd-kit/utilities)",
+      "Bash(cd \"/c/Users/tlall/Desktop/AI ChatWebClient\" && mkdir -p src/lib/supabase src/components src/types && ls -la src/)",
+      "Bash(cd \"/c/Users/tlall/Desktop/AI ChatWebClient\" && npm run build 2>&1 | head -50)",
+      "Bash(cd \"/c/Users/tlall/Desktop/AI ChatWebClient\" && npm run build)",
+      "Bash(cd \"/c/Users/tlall/Desktop/AI ChatWebClient\" && npm run build 2>&1 | tail -30)",
+      "Bash(cd \"/c/Users/tlall/Desktop/AI ChatWebClient\" && npm run build 2>&1 | tail -20)",
+      "Bash(cd \"/c/Users/tlall/Desktop/AI ChatWebClient\" && npm run dev)",
+      "Bash(sleep 5 && curl -s http://localhost:3000 | head -20)",
+      "Bash(curl -s http://localhost:3001 | grep -o \"<title>.*</title>\")",
+      "Bash(sleep 8 && curl -s http://localhost:3000/login | grep -o \"<title>.*</title>\" || curl -s http://localhost:3001/login | grep -o \"<title>.*</title>\")",
+      "Bash(cd \"/c/Users/tlall/Desktop/AI ChatWebClient\" && npm run build 2>&1 | tail -15)",
+      "Bash(cd \"/c/Users/tlall/Desktop/AI ChatWebClient\" && npm run build 2>&1 | tail -25)",
+      "WebSearch",
+      "WebFetch(domain:smith.ai)",
+      "WebFetch(domain:www.getnextphone.com)",
+      "WebFetch(domain:www.lindy.ai)",
+      "WebFetch(domain:www.retellai.com)"
+    ]
+  }
+}
