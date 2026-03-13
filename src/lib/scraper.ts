@@ -7,9 +7,16 @@ const phoneRegex = /\+?1?\s*\(?([0-9]{3})\)?[\s.-]?([0-9]{3})[\s.-]?([0-9]{4})/g
 export async function scrapeWebsite(url: string): Promise<ScrapedData> {
   try {
     // Ensure URL has protocol
-    let fullUrl = url
+    let fullUrl = url.trim()
     if (!fullUrl.startsWith('http://') && !fullUrl.startsWith('https://')) {
       fullUrl = 'https://' + fullUrl
+    }
+
+    // Validate URL format
+    try {
+      new URL(fullUrl)
+    } catch (err) {
+      throw new Error(`Invalid URL format: ${fullUrl}`)
     }
 
     const controller = new AbortController()
