@@ -236,7 +236,7 @@ function generateEmailHTML(params: {
               You received this email because you're interested in AI for your business.
             </p>
             <!-- Tracking pixel - DO NOT REMOVE -->
-            <img src="${process.env.NEXT_PUBLIC_APP_URL}/api/email-tracking?token=${params.demoToken}&event=open" alt="" class="tracking-pixel" />
+            <img src="${appUrl}/api/email-tracking?token=${demoToken}&event=open" alt="" class="tracking-pixel" />
           </div>
         </div>
       </body>

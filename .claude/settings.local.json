@@ -24,7 +24,8 @@
       "WebFetch(domain:smith.ai)",
       "WebFetch(domain:www.getnextphone.com)",
       "WebFetch(domain:www.lindy.ai)",
-      "WebFetch(domain:www.retellai.com)"
+      "WebFetch(domain:www.retellai.com)",
+      "Bash(cd \"C:\\\\Users\\\\tlall\\\\Desktop\\\\AI ChatWebClient\" && npx vercel --prod)"
     ]
   }
 }
