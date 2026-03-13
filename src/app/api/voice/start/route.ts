@@ -39,17 +39,6 @@ export async function POST(request: NextRequest) {
     // The frontend will use Vapi Web Client to handle the voice conversation
     console.log('✅ Voice session initialized for:', businessProfile.businessName)
 
-    // Log the voice session start (optional, don't block on error)
-    supabase.from('demo_events').insert({
-      lead_id: lead.id,
-      event_type: 'voice_session_started',
-      metadata: {
-        prospectName: prospectName || 'Guest',
-        businessName: businessProfile.businessName,
-        timestamp: new Date().toISOString(),
-      },
-    }).catch(err => console.log('Log error:', err))
-
     return NextResponse.json({
       assistantId: process.env.VAPI_ASSISTANT_ID,
       businessName: businessProfile.businessName,
