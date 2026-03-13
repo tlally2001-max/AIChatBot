@@ -30,50 +30,56 @@ export function DemoHeroPage({
   const [sending, setSending] = useState(false)
 
   const handleStartVoiceCall = async () => {
-    // Ask user for phone number only once
-    let number = phoneNumber
-    if (!number) {
-      number = prompt('📞 Enter your phone number to receive the call:\n(e.g., +1-725-373-9952 or 7253739952)')
-      if (!number) {
-        return // User cancelled
-      }
-      setPhoneNumber(number)
-    }
-
     setVoiceLoading(true)
     try {
+      // Initialize voice session with backend
       const response = await fetch('/api/voice/start', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           demoToken,
-          prospectEmail: number,
           prospectName: clientName || 'Guest',
         }),
       })
 
       if (!response.ok) {
         const data = await response.json()
-        alert(`❌ Error: ${data.error || 'Failed to start voice call'}`)
+        alert(`❌ Error: ${data.error || 'Failed to start voice session'}`)
         return
       }
 
       const data = await response.json()
-      alert(`📞 Emma is calling you now!\n\nCalling: ${number}\n\nMake sure your phone is nearby!`)
+      const assistantId = data.assistantId
 
-      // Log voice start
-      await fetch('/api/demo-tracking', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          demoToken,
-          event: 'voice_start',
-          metadata: { prospectName: clientName || 'Guest', phoneNumber: number },
-        }),
-      }).catch(err => console.log('Tracking error:', err))
+      // Load Vapi Web Client script
+      const script = document.createElement('script')
+      script.src = 'https://cdn.jsdelivr.net/npm/@vapi-ai/web@latest/dist/vapi.js'
+      script.async = true
+      script.onload = () => {
+        // Initialize Vapi with browser-based voice
+        if (window.Vapi) {
+          console.log('🎤 Starting browser-based voice conversation...')
+          window.Vapi.start({
+            assistantId: assistantId,
+            apiKey: process.env.NEXT_PUBLIC_VAPI_API_KEY, // Note: Use public key for web client
+          })
+
+          // Log voice start
+          fetch('/api/demo-tracking', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              demoToken,
+              event: 'voice_start',
+              metadata: { prospectName: clientName || 'Guest', type: 'browser-based' },
+            }),
+          }).catch(err => console.log('Tracking error:', err))
+        }
+      }
+      document.head.appendChild(script)
     } catch (error) {
-      console.error('Voice call error:', error)
-      alert('❌ Failed to start voice call. Please try again.')
+      console.error('Voice session error:', error)
+      alert('❌ Failed to start voice session. Please try again.')
     } finally {
       setVoiceLoading(false)
     }
@@ -321,9 +327,9 @@ export function DemoHeroPage({
                           {/* Voice Mode */}
                           <div className="flex-1 flex flex-col items-center justify-center p-6 bg-gradient-to-b from-green-50 to-white">
                             <div className="text-6xl mb-4">🎤</div>
-                            <h3 className="text-xl font-bold text-gray-900 mb-2">Emma Voice Call</h3>
+                            <h3 className="text-xl font-bold text-gray-900 mb-2">Voice Conversation</h3>
                             <p className="text-center text-gray-600 text-sm mb-6">
-                              Talk to Emma on the phone. She'll answer your questions and qualify your interest.
+                              Talk to Emma directly through your microphone. She'll answer questions and help you.
                             </p>
                             <button
                               onClick={handleStartVoiceCall}
@@ -333,16 +339,16 @@ export function DemoHeroPage({
                               {voiceLoading ? (
                                 <>
                                   <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                                  Calling...
+                                  Starting...
                                 </>
                               ) : (
                                 <>
-                                  📞 Start Voice Call
+                                  🎤 Start Voice Chat
                                 </>
                               )}
                             </button>
                             <p className="text-xs text-gray-500 mt-4 text-center">
-                              You'll receive a call shortly. Make sure your phone is nearby!
+                              Click to start. Grant mic permission when prompted.
                             </p>
                           </div>
                         </>

@@ -219,18 +219,52 @@ Then:
 
 ---
 
+## 📞 Voice Integration Notes
+
+### Current Approach: Browser-Based Voice (Web Client)
+- Voice chat happens in-browser using Vapi Web Client
+- No phone call required
+- User speaks through mic, hears response through speakers
+- Better UX for demo experience
+
+### Legacy Approach: Outbound Phone Calls
+If you need to revert to outbound phone calls (calling user's actual phone):
+
+**Files involved:**
+- `src/app/api/voice/start/route.ts` - Old outbound call endpoint
+- `src/components/DemoHeroPage.tsx` - Old phone number prompt logic
+- `test-vapi.js` - Test suite for outbound calls
+
+**Required Credentials:**
+```
+VAPI_API_KEY=<private_key>
+VAPI_ASSISTANT_ID=<assistant_id>
+VAPI_PHONE_NUMBER_ID=<phone_number_id>
+TWILIO_ACCOUNT_SID=<account_sid>
+```
+
+**How it worked:**
+1. User entered phone number in prompt
+2. Vapi made outbound call to that number
+3. Emma answered with business-specific greeting
+4. User had to switch to their phone to talk
+
+To restore: Check git history for commit `1ccd218` (Complete Vapi voice call integration)
+
+---
+
 ## 📞 Next Action
 
-**Right now:** Restart dev server and test the full system
+**Right now:** Restart dev server and test the browser-based voice
 
 ```bash
 npm run dev
 ```
 
-Then go through the "What You Can Do RIGHT NOW" checklist above.
+Then test the voice call from the demo - no phone number needed!
 
 ---
 
 **Status:** 95% Complete - Ready for Full Testing
-**Date:** 2026-03-12
-**Blocker:** None - All APIs configured and working
+**Date:** 2026-03-13
+**Voice Mode:** Browser-based (Web Client) - Outbound phone calls available in git history
