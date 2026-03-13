@@ -32,7 +32,8 @@
       "Bash(curl -v http://localhost:3000 2>&1 | head -50)",
       "Bash(curl -s http://localhost:3007 | head -10)",
       "Bash(curl -s \"http://localhost:3007/api/demo-business?businessName=TestBiz\" | head -20)",
-      "Bash(curl -X POST http://localhost:3008/api/voice/start \\\\\n  -H \"Content-Type: application/json\" \\\\\n  -d '{\"demoToken\":\"test\",\"prospectEmail\":\"test@example.com\",\"prospectName\":\"Test User\"}' 2>&1 | jq . || curl -X POST http://localhost:3008/api/voice/start \\\\\n  -H \"Content-Type: application/json\" \\\\\n  -d '{\"demoToken\":\"test\",\"prospectEmail\":\"test@example.com\",\"prospectName\":\"Test User\"}' 2>&1)"
+      "Bash(curl -X POST http://localhost:3008/api/voice/start \\\\\n  -H \"Content-Type: application/json\" \\\\\n  -d '{\"demoToken\":\"test\",\"prospectEmail\":\"test@example.com\",\"prospectName\":\"Test User\"}' 2>&1 | jq . || curl -X POST http://localhost:3008/api/voice/start \\\\\n  -H \"Content-Type: application/json\" \\\\\n  -d '{\"demoToken\":\"test\",\"prospectEmail\":\"test@example.com\",\"prospectName\":\"Test User\"}' 2>&1)",
+      "WebFetch(domain:docs.vapi.ai)"
     ]
   }
 }

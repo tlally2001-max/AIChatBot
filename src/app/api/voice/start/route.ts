@@ -50,6 +50,10 @@ export async function POST(request: NextRequest) {
     const vapiPayload = {
       phoneNumberId: process.env.VAPI_PHONE_NUMBER_ID,
       assistantId: process.env.VAPI_ASSISTANT_ID,
+      customer: {
+        name: prospectName || 'Guest',
+        number: e164Phone,
+      },
       phoneNumber: {
         twilioPhoneNumber: e164Phone,
         twilioAccountSid: process.env.TWILIO_ACCOUNT_SID || undefined,
