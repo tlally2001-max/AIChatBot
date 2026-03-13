@@ -36,20 +36,24 @@ export async function POST(request: NextRequest) {
     const vapiConfig = createVapiAgentConfig(businessProfile, webhookUrl)
 
     // Call Vapi API to create phone number and start voice session
+    const vapiPayload = {
+      phoneNumberId: process.env.VAPI_PHONE_NUMBER_ID,
+      assistantId: process.env.VAPI_ASSISTANT_ID,
+      phoneNumber: prospectEmail, // Phone number to call (corrected from customerNumber)
+      assistantOverrides: {
+        firstMessage: `Hi ${prospectName || 'there'}, I'm Emma with ${businessProfile.businessName || 'the team'}. How can I help you today?`,
+      },
+    }
+
+    console.log('📞 Calling Vapi with:', { phoneNumberId: '...', assistantId: '...', phoneNumber: prospectEmail })
+
     const vapiResponse = await fetch('https://api.vapi.ai/call', {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${process.env.VAPI_API_KEY}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        phoneNumberId: process.env.VAPI_PHONE_NUMBER_ID || undefined,
-        customerNumber: prospectEmail || '+1234567890',
-        assistantId: process.env.VAPI_ASSISTANT_ID || undefined,
-        assistantOverrides: {
-          firstMessage: `Hi ${prospectName || 'there'}, I'm Emma with ${businessProfile.businessName || 'the team'}. How can I help you today?`,
-        },
-      }),
+      body: JSON.stringify(vapiPayload),
     })
 
     if (!vapiResponse.ok) {
