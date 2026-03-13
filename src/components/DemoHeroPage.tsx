@@ -44,6 +44,7 @@ export function DemoHeroPage({
 
       if (!response.ok) {
         const data = await response.json()
+        console.error('❌ Voice session error:', data)
         alert(`❌ Error: ${data.error || 'Failed to start voice session'}`)
         return
       }
