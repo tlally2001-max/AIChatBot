@@ -19,6 +19,7 @@ export function DemoHeroPage({
   const [chatOpen, setChatOpen] = useState(false)
   const [demoMode, setDemoMode] = useState<'chat' | 'voice'>('chat')
   const [voiceLoading, setVoiceLoading] = useState(false)
+  const [phoneNumber, setPhoneNumber] = useState<string | null>(null)
   const [messages, setMessages] = useState<Array<{ role: string; content: string }>>([
     {
       role: 'assistant',
@@ -29,10 +30,14 @@ export function DemoHeroPage({
   const [sending, setSending] = useState(false)
 
   const handleStartVoiceCall = async () => {
-    // Ask user for their phone number
-    const phoneNumber = prompt('📞 Enter your phone number to receive the call:\n(e.g., +1234567890 or 1234567890)')
-    if (!phoneNumber) {
-      return // User cancelled
+    // Ask user for phone number only once
+    let number = phoneNumber
+    if (!number) {
+      number = prompt('📞 Enter your phone number to receive the call:\n(e.g., +1-725-373-9952 or 7253739952)')
+      if (!number) {
+        return // User cancelled
+      }
+      setPhoneNumber(number)
     }
 
     setVoiceLoading(true)
@@ -42,7 +47,7 @@ export function DemoHeroPage({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           demoToken,
-          prospectEmail: phoneNumber,
+          prospectEmail: number,
           prospectName: clientName || 'Guest',
         }),
       })
@@ -54,7 +59,7 @@ export function DemoHeroPage({
       }
 
       const data = await response.json()
-      alert(`📞 Emma is calling you now!\n\nCalling: ${phoneNumber}\n\nMake sure your phone is nearby!`)
+      alert(`📞 Emma is calling you now!\n\nCalling: ${number}\n\nMake sure your phone is nearby!`)
 
       // Log voice start
       await fetch('/api/demo-tracking', {
@@ -63,7 +68,7 @@ export function DemoHeroPage({
         body: JSON.stringify({
           demoToken,
           event: 'voice_start',
-          metadata: { prospectName: clientName || 'Guest', phoneNumber },
+          metadata: { prospectName: clientName || 'Guest', phoneNumber: number },
         }),
       }).catch(err => console.log('Tracking error:', err))
     } catch (error) {
