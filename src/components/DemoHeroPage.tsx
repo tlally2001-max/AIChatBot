@@ -17,6 +17,8 @@ export function DemoHeroPage({
   websiteUrl,
 }: DemoHeroPageProps) {
   const [chatOpen, setChatOpen] = useState(false)
+  const [demoMode, setDemoMode] = useState<'chat' | 'voice'>('chat')
+  const [voiceLoading, setVoiceLoading] = useState(false)
   const [messages, setMessages] = useState<Array<{ role: string; content: string }>>([
     {
       role: 'assistant',
@@ -25,6 +27,46 @@ export function DemoHeroPage({
   ])
   const [input, setInput] = useState('')
   const [sending, setSending] = useState(false)
+
+  const handleStartVoiceCall = async () => {
+    setVoiceLoading(true)
+    try {
+      const response = await fetch('/api/voice/start', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          demoToken,
+          prospectEmail: clientName,
+          prospectName: clientName,
+        }),
+      })
+
+      if (!response.ok) {
+        const data = await response.json()
+        alert(`Error: ${data.error || 'Failed to start voice call'}`)
+        return
+      }
+
+      const data = await response.json()
+      alert(`📞 Emma is calling you now!\n\nPhone: ${data.phoneNumber || 'Check your phone'}`)
+
+      // Log voice start
+      await fetch('/api/demo-tracking', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          demoToken,
+          event: 'voice_start',
+          metadata: { prospectName: clientName },
+        }),
+      }).catch(err => console.log('Tracking error:', err))
+    } catch (error) {
+      console.error('Voice call error:', error)
+      alert('Failed to start voice call. Please try again.')
+    } finally {
+      setVoiceLoading(false)
+    }
+  }
 
   const handleSend = async () => {
     if (!input.trim()) return
@@ -172,67 +214,128 @@ export function DemoHeroPage({
                   {chatOpen && (
                     <div className="absolute bottom-4 right-4 w-72 bg-white rounded-2xl shadow-2xl overflow-hidden z-50 flex flex-col h-96">
                       {/* Chat Header */}
-                      <div className="bg-green-600 text-white p-3 flex justify-between items-center">
-                        <div>
-                          <p className="font-bold text-sm">Emma</p>
-                          <p className="text-green-100 text-xs">AI Receptionist • Always Here</p>
-                        </div>
-                        <button
-                          onClick={() => setChatOpen(false)}
-                          className="text-white hover:text-green-100 text-lg font-bold"
-                        >
-                          ✕
-                        </button>
-                      </div>
-
-                      {/* Chat Messages */}
-                      <div className="flex-1 overflow-y-auto p-3 space-y-3 bg-gray-50">
-                        {messages.map((msg, i) => (
-                          <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                            <div
-                              className={`max-w-xs px-3 py-2 rounded-lg text-sm ${
-                                msg.role === 'user'
-                                  ? 'bg-green-600 text-white rounded-br-none'
-                                  : 'bg-white text-gray-900 rounded-bl-none border border-gray-200'
-                              }`}
-                            >
-                              {msg.content}
-                            </div>
+                      <div className="bg-green-600 text-white p-3">
+                        <div className="flex justify-between items-center mb-3">
+                          <div>
+                            <p className="font-bold text-sm">Emma</p>
+                            <p className="text-green-100 text-xs">AI Receptionist • Always Here</p>
                           </div>
-                        ))}
-                        {sending && (
-                          <div className="flex justify-start">
-                            <div className="bg-white px-3 py-2 rounded-lg border border-gray-200">
-                              <div className="flex space-x-1">
-                                <div className="w-1.5 h-1.5 bg-gray-500 rounded-full animate-bounce"></div>
-                                <div className="w-1.5 h-1.5 bg-gray-500 rounded-full animate-bounce delay-100"></div>
-                                <div className="w-1.5 h-1.5 bg-gray-500 rounded-full animate-bounce delay-200"></div>
-                              </div>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Chat Input */}
-                      <div className="border-t border-gray-200 p-2 bg-white">
-                        <div className="flex gap-2">
-                          <input
-                            type="text"
-                            value={input}
-                            onChange={e => setInput(e.target.value)}
-                            onKeyPress={e => e.key === 'Enter' && handleSend()}
-                            placeholder="Ask Emma anything..."
-                            className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-green-500"
-                          />
                           <button
-                            onClick={handleSend}
-                            disabled={sending || !input.trim()}
-                            className="bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white px-3 py-2 rounded-lg font-medium text-sm"
+                            onClick={() => setChatOpen(false)}
+                            className="text-white hover:text-green-100 text-lg font-bold"
                           >
-                            →
+                            ✕
+                          </button>
+                        </div>
+
+                        {/* Mode Selector */}
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => setDemoMode('chat')}
+                            className={`flex-1 py-1.5 px-2 rounded text-xs font-bold transition-all ${
+                              demoMode === 'chat'
+                                ? 'bg-white text-green-600'
+                                : 'bg-green-500 text-white hover:bg-green-700'
+                            }`}
+                          >
+                            💬 Chat
+                          </button>
+                          <button
+                            onClick={() => setDemoMode('voice')}
+                            className={`flex-1 py-1.5 px-2 rounded text-xs font-bold transition-all ${
+                              demoMode === 'voice'
+                                ? 'bg-white text-green-600'
+                                : 'bg-green-500 text-white hover:bg-green-700'
+                            }`}
+                          >
+                            🎤 Call
                           </button>
                         </div>
                       </div>
+
+                      {/* Chat Mode */}
+                      {demoMode === 'chat' ? (
+                        <>
+                          {/* Chat Messages */}
+                          <div className="flex-1 overflow-y-auto p-3 space-y-3 bg-gray-50">
+                            {messages.map((msg, i) => (
+                              <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                                <div
+                                  className={`max-w-xs px-3 py-2 rounded-lg text-sm ${
+                                    msg.role === 'user'
+                                      ? 'bg-green-600 text-white rounded-br-none'
+                                      : 'bg-white text-gray-900 rounded-bl-none border border-gray-200'
+                                  }`}
+                                >
+                                  {msg.content}
+                                </div>
+                              </div>
+                            ))}
+                            {sending && (
+                              <div className="flex justify-start">
+                                <div className="bg-white px-3 py-2 rounded-lg border border-gray-200">
+                                  <div className="flex space-x-1">
+                                    <div className="w-1.5 h-1.5 bg-gray-500 rounded-full animate-bounce"></div>
+                                    <div className="w-1.5 h-1.5 bg-gray-500 rounded-full animate-bounce delay-100"></div>
+                                    <div className="w-1.5 h-1.5 bg-gray-500 rounded-full animate-bounce delay-200"></div>
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Chat Input */}
+                          <div className="border-t border-gray-200 p-2 bg-white">
+                            <div className="flex gap-2">
+                              <input
+                                type="text"
+                                value={input}
+                                onChange={e => setInput(e.target.value)}
+                                onKeyPress={e => e.key === 'Enter' && handleSend()}
+                                placeholder="Ask Emma anything..."
+                                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-green-500"
+                              />
+                              <button
+                                onClick={handleSend}
+                                disabled={sending || !input.trim()}
+                                className="bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white px-3 py-2 rounded-lg font-medium text-sm"
+                              >
+                                →
+                              </button>
+                            </div>
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          {/* Voice Mode */}
+                          <div className="flex-1 flex flex-col items-center justify-center p-6 bg-gradient-to-b from-green-50 to-white">
+                            <div className="text-6xl mb-4">🎤</div>
+                            <h3 className="text-xl font-bold text-gray-900 mb-2">Emma Voice Call</h3>
+                            <p className="text-center text-gray-600 text-sm mb-6">
+                              Talk to Emma on the phone. She'll answer your questions and qualify your interest.
+                            </p>
+                            <button
+                              onClick={handleStartVoiceCall}
+                              disabled={voiceLoading}
+                              className="w-full px-4 py-3 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white font-bold rounded-lg transition-all flex items-center justify-center gap-2"
+                            >
+                              {voiceLoading ? (
+                                <>
+                                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                  Calling...
+                                </>
+                              ) : (
+                                <>
+                                  📞 Start Voice Call
+                                </>
+                              )}
+                            </button>
+                            <p className="text-xs text-gray-500 mt-4 text-center">
+                              You'll receive a call shortly. Make sure your phone is nearby!
+                            </p>
+                          </div>
+                        </>
+                      )}
                     </div>
                   )}
 
