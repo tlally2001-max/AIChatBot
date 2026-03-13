@@ -20,6 +20,7 @@ export default function DemoPage() {
   const demoToken = params.token as string
 
   const [businessProfile, setBusinessProfile] = useState<BusinessProfile | null>(null)
+  const [websiteUrl, setWebsiteUrl] = useState<string | null>(null)
   const [demoSession, setDemoSession] = useState<DemoSession | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -40,6 +41,7 @@ export default function DemoPage() {
 
         const lead = await response.json()
         setBusinessProfile(lead.business_profile)
+        setWebsiteUrl(lead.url)
 
         // Log demo page view
         await fetch('/api/demo-analytics', {
@@ -209,35 +211,29 @@ export default function DemoPage() {
 
                   {/* URL Bar */}
                   <div className="bg-gray-100 px-3 py-2 mx-2 mt-2 rounded-lg text-xs text-gray-600 truncate border border-gray-200">
-                    {businessProfile.websiteUrl || 'yourwebsite.com'}
+                    {websiteUrl ? websiteUrl.replace('https://', '').replace('http://', '') : 'yourwebsite.com'}
                   </div>
 
-                  {/* Demo Preview Content */}
-                  <div className="flex-1 overflow-hidden bg-gradient-to-b from-blue-50 to-indigo-100 flex flex-col items-center justify-center p-4">
-                    <div className="text-center">
-                      <p className="text-sm font-bold text-gray-900 mb-2">
-                        {businessProfile.businessName}
-                      </p>
-                      <p className="text-xs text-gray-600 mb-4">
-                        Powered by AI Emma
-                      </p>
-                      <div className="bg-white rounded-lg shadow p-3 mb-4 text-xs">
-                        <p className="text-gray-900 mb-2">
-                          "Hi! How can I help you today?"
-                        </p>
-                        <div className="space-y-2">
-                          <button className="block w-full text-left text-blue-600 hover:underline text-xs p-1">
-                            Tell me about your services
-                          </button>
-                          <button className="block w-full text-left text-blue-600 hover:underline text-xs p-1">
-                            Schedule a demo
-                          </button>
+                  {/* Website Content - using iframe */}
+                  <div className="flex-1 overflow-hidden relative bg-white">
+                    {websiteUrl ? (
+                      <iframe
+                        key={websiteUrl}
+                        src={websiteUrl}
+                        className="w-full h-full border-0"
+                        title="Website Demo"
+                        sandbox="allow-scripts allow-popups allow-forms allow-navigation"
+                        style={{ pointerEvents: 'auto' }}
+                      />
+                    ) : (
+                      <div className="flex items-center justify-center h-full bg-gray-50">
+                        <div className="text-center">
+                          <div className="text-4xl mb-2">🌐</div>
+                          <p className="text-xs text-gray-600">Loading...</p>
+                          <p className="text-xs text-gray-500 mt-2">No website loaded yet</p>
                         </div>
                       </div>
-                      <p className="text-xs text-gray-500">
-                        💬 Start chatting →
-                      </p>
-                    </div>
+                    )}
                   </div>
                 </div>
               </div>
