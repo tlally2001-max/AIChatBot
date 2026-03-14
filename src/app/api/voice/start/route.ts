@@ -1,6 +1,32 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 
+function buildSystemPrompt(businessProfile: any, businessName?: string): string {
+  const name = businessName || businessProfile?.businessName || 'our business'
+  const description = businessProfile?.description || ''
+  const services = businessProfile?.services || []
+  const servicesList = Array.isArray(services) ? services.join(', ') : ''
+  const phone = businessProfile?.phone || ''
+  const email = businessProfile?.email || ''
+  const address = businessProfile?.address || ''
+
+  let prompt = `You are Emma, a professional AI receptionist for ${name}. You are helpful, friendly, and knowledgeable about the business.
+
+Business Information:
+${description ? `Description: ${description}\n` : ''}${servicesList ? `Services offered: ${servicesList}\n` : ''}${phone ? `Phone: ${phone}\n` : ''}${email ? `Email: ${email}\n` : ''}${address ? `Address: ${address}\n` : ''}
+
+Your responsibilities:
+1. Greet callers warmly and professionally
+2. Answer questions about ${name} based on the business information above
+3. Help with scheduling or gather contact information
+4. Be concise and friendly
+5. If asked about something you don't know, offer to have someone call back
+
+Keep responses brief and conversational. Always stay in character as Emma.`
+
+  return prompt
+}
+
 export async function POST(request: NextRequest) {
   try {
     console.log('📞 Voice session request received')
@@ -34,15 +60,23 @@ export async function POST(request: NextRequest) {
     console.log('✅ Lead found:', lead.business_name)
 
     const businessProfile = lead.business_profile || {}
+    const systemPrompt = buildSystemPrompt(businessProfile, lead.business_name)
 
-    // For browser-based voice, we just need to return the assistant ID
-    // The frontend will use Vapi Web Client to handle the voice conversation
-    console.log('✅ Voice session initialized for:', businessProfile.businessName)
+    // Create a custom assistant with business context using Vapi API
+    let assistantId = process.env.VAPI_ASSISTANT_ID || ''
+
+    // For now, use the pre-configured Vapi assistant
+    // The system prompt is handled via the Claude backend AI that the user interacts with
+    console.log('📋 Using Vapi assistant for voice: ', assistantId)
+    console.log('💬 Business context will be provided via chat system prompt')
+
+    console.log('✅ Voice session initialized for:', lead.business_name)
 
     return NextResponse.json({
-      assistantId: process.env.VAPI_ASSISTANT_ID,
-      businessName: businessProfile.businessName,
+      assistantId: assistantId,
+      businessName: lead.business_name,
       prospectName: prospectName || 'Guest',
+      businessProfile: businessProfile,
       message: '🎤 Voice session ready. Click to start speaking!',
     })
   } catch (error) {

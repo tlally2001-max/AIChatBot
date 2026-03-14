@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
+import Vapi from '@vapi-ai/web'
 import { BusinessProfile } from '@/types'
 
 interface DemoHeroPageProps {
@@ -8,6 +9,39 @@ interface DemoHeroPageProps {
   demoToken: string
   clientName?: string
   websiteUrl?: string
+}
+
+// Build system prompt from business profile
+function buildSystemPrompt(businessProfile: any, businessName?: string): string {
+  const name = businessName || businessProfile?.businessName || 'Emma'
+  const description = businessProfile?.description || ''
+  const services = businessProfile?.services || []
+  const servicesList = Array.isArray(services) ? services.join(', ') : ''
+
+  // Include all detailed information from the business profile
+  const fullBusinessInfo = businessProfile?.faq?.map((item: any) =>
+    `Q: ${item.question}\nA: ${item.answer}`
+  ).join('\n\n') || ''
+
+  return `You are Emma, a friendly and professional AI receptionist for ${name}.
+
+BUSINESS DETAILS:
+Business Name: ${name}
+${description ? `\nOverview: ${description}` : ''}
+${servicesList ? `\nServices/Features: ${servicesList}` : ''}
+
+FREQUENTLY ASKED QUESTIONS & ANSWERS:
+${fullBusinessInfo}
+
+INSTRUCTIONS:
+1. Answer questions based ONLY on the information provided above
+2. Be warm, friendly, and conversational
+3. Provide specific details when asked (prices, amenities, cabin counts, features, etc.)
+4. If a question is about something not in your knowledge base, politely say so
+5. Encourage the caller to visit the website or call for more information
+6. Keep responses natural and brief (1-3 sentences typically)
+
+Remember: You represent this business, so be enthusiastic but honest about what's offered.`
 }
 
 export function DemoHeroPage({
@@ -28,6 +62,7 @@ export function DemoHeroPage({
   ])
   const [input, setInput] = useState('')
   const [sending, setSending] = useState(false)
+  const vapiRef = useRef<any>(null)
 
   const handleStartVoiceCall = async () => {
     setVoiceLoading(true)
@@ -50,34 +85,48 @@ export function DemoHeroPage({
       }
 
       const data = await response.json()
-      const assistantId = data.assistantId
+      const businessProfile = data.businessProfile || {}
 
-      // Load Vapi Web Client script
-      const script = document.createElement('script')
-      script.src = 'https://cdn.jsdelivr.net/npm/@vapi-ai/web@latest/dist/vapi.js'
-      script.async = true
-      script.onload = () => {
-        // Initialize Vapi with browser-based voice
-        if (window.Vapi) {
-          console.log('🎤 Starting browser-based voice conversation...')
-          window.Vapi.start({
-            assistantId: assistantId,
-            apiKey: process.env.NEXT_PUBLIC_VAPI_API_KEY, // Note: Use public key for web client
-          })
+      // Initialize Vapi with browser-based voice using the installed package
+      console.log('🎤 Starting browser-based voice conversation...')
+      console.log('📋 Business profile:', businessProfile)
 
-          // Log voice start
-          fetch('/api/demo-tracking', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              demoToken,
-              event: 'voice_start',
-              metadata: { prospectName: clientName || 'Guest', type: 'browser-based' },
-            }),
-          }).catch(err => console.log('Tracking error:', err))
-        }
+      const vapi = new Vapi(process.env.NEXT_PUBLIC_VAPI_API_KEY || '')
+
+      vapiRef.current = vapi
+
+      // Build custom assistant with business knowledge
+      const systemPrompt = buildSystemPrompt(businessProfile, data.businessName)
+
+      // Create custom assistant configuration with Claude and business context
+      const customAssistant: any = {
+        model: {
+          provider: 'anthropic',
+          model: 'claude-opus-4-6',
+          systemPrompt: systemPrompt,
+          temperature: 0.7,
+        },
+        voice: {
+          provider: 'openai',
+          voiceId: 'alloy',
+        },
+        firstMessageMode: 'assistant-speaks-first',
+        endCallMessage: 'Thank you for calling! Goodbye!',
       }
-      document.head.appendChild(script)
+
+      // Start the voice call with custom assistant
+      await vapi.start(customAssistant)
+
+      // Log voice start
+      fetch('/api/demo-tracking', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          demoToken,
+          event: 'voice_start',
+          metadata: { prospectName: clientName || 'Guest', type: 'claude-powered-voice' },
+        }),
+      }).catch(err => console.log('Tracking error:', err))
     } catch (error) {
       console.error('Voice session error:', error)
       alert('❌ Failed to start voice session. Please try again.')
