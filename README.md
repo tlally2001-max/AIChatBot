@@ -4,15 +4,22 @@
 
 ---
 
-## 📊 Current Status: 95% Complete ✅
+## 📊 Current Status: 100% Complete - MVP FULLY FUNCTIONAL ✅
 
-### ✅ COMPLETED
+### ✅ COMPLETED - CORE DEMO FUNCTIONALITY
 - [x] Next.js 14 scaffold (TypeScript + Tailwind)
 - [x] Supabase auth & database with RLS
-- [x] Web scraper (Cheerio)
-- [x] Knowledge base builder
-- [x] **Emma AI Agent** - Claude API integration
-- [x] **Vapi voice agent** - phone calls with function hooks
+- [x] **Deep website scraper** - Crawls property pages for detailed info
+  - Finds up to 8 property/cabin/listing links
+  - Extracts bedrooms, bathrooms, capacity, amenities, pricing
+  - Multiple extraction strategies for different HTML structures
+  - Scrapes up to 5 property detail pages per business
+- [x] **Knowledge base builder** - Structured data from all scraped pages
+- [x] **Emma AI Agent** - Claude Opus integration for chat
+- [x] **Vapi voice agent** - Browser-based voice using Claude Anthropic
+  - Voice responses include full business context & FAQ data
+  - Same knowledge level as chat (bedrooms, amenities, pricing, etc.)
+  - No phone number required - works in-browser
 - [x] Email automation with Resend
 - [x] Email tracking pixel
 - [x] Professional demo landing page (dark gradient, hero section)
@@ -25,10 +32,11 @@
 - [x] Analytics & event logging
 - [x] Lead status management (auto-updates)
 
-### 🔄 NEXT IMMEDIATE STEPS
-1. **Restart dev server** (`npm run dev`)
-2. **Run full end-to-end test**
-3. **Build customer-facing platform**
+### 🎯 MVP WORKS - DEMO COMPLETE
+- Voice agent answers detailed questions (cabins, amenities, pricing)
+- Chat and voice have equal knowledge depth
+- Both use scraped website data + FAQ knowledge
+- Full business context in both modalities
 
 ---
 
@@ -126,25 +134,54 @@ docs/
 
 ---
 
-## 🚀 What You Can Do RIGHT NOW
+## 🚀 Quick Start - Test the MVP
 
-✅ **Test locally:**
+**Prerequisites:**
+- All environment variables configured in `.env.local`
+- Vapi account with credentials (NEXT_PUBLIC_VAPI_API_KEY, VAPI_ASSISTANT_ID)
+- Supabase database set up with leads table
+
+**Start the server:**
 ```bash
-npm run dev  # Start dev server on localhost:3000
+npm run dev  # Start on http://localhost:3011
 ```
 
-Then:
-1. Go to http://localhost:3000
-2. Enter website URL (e.g., https://example.com)
-3. Enter prospect email (e.g., test@example.com)
-4. Click "Scrape & Analyze"
-5. Email sent automatically
-6. Check Resend dashboard for email delivery
-7. Click demo link → see website preview + Emma widget
-8. Try chat with Emma (Claude responds)
-9. Try voice demo (Vapi initializes)
-10. Check Slack for real-time alerts
-11. View all leads in /dashboard
+**Test the full flow:**
+
+1. **Home Page** - http://localhost:3011
+   - Enter website URL (e.g., `hthva.com`)
+   - Enter prospect email
+   - Click "Scrape & Analyze"
+   - System crawls main page + up to 5 property detail pages
+
+2. **Get Demo Token**
+   - Email sent automatically (check Resend dashboard)
+   - Demo link in email contains unique demo token
+   - Or find token in Supabase `leads` table
+
+3. **Test Demo Page** - http://localhost:3011/demo/[token]
+   - Website preview loads in iPhone mockup
+   - Emma chat widget floating on right
+   - Click "💬 Chat" to test text conversation
+   - Click "🎤 Voice" to test voice call
+   - **Both should respond with detailed business info**
+
+4. **Voice Testing - Full Capabilities**
+   - "How many cabins?" → Emma responds with exact count
+   - "What amenities?" → Lists hot tubs, internet, massage, etc.
+   - "Are pets allowed?" → Answers about dog-friendly policies
+   - "What's the price?" → Provides pricing information
+   - Voice uses same knowledge base as chat
+
+5. **Monitor in Real-time**
+   - Check Slack for instant notifications
+   - View `/dashboard` for Kanban pipeline of leads
+   - All interactions logged (chat starts, voice starts, etc.)
+
+**Key Files to Understand:**
+- `src/lib/scraper.ts` - Deep crawling logic for property pages
+- `src/components/DemoHeroPage.tsx` - Voice + chat UI & initialization
+- `src/app/api/voice/start/route.ts` - Vapi configuration endpoint
 
 ---
 
@@ -167,31 +204,37 @@ Then:
 
 ---
 
-## ⏳ What's Next
+## ⏳ What's Next - Beyond MVP
 
-### Immediate (Today)
-1. ✅ Slack webhook setup - **DONE**
-2. Restart dev server
-3. Run full end-to-end test
-4. Verify all Slack alerts working
+### Phase 1: Platform Features (Next)
+1. **Embed Code Generator** - Customers copy embed code to their site
+2. **Custom Branding** - Logo, colors, welcome messages
+3. **Analytics Dashboard** - Real-time metrics for customers
+4. **Lead Exports** - CSV/JSON downloads of qualified leads
 
-### Short-term (This Week)
-1. Build customer-facing landing page
-2. Create pricing page
-3. Set up Stripe for payment processing
-4. Build customer onboarding flow
+### Phase 2: Monetization
+1. **Stripe Integration** - $399/month subscription billing
+2. **Free Trial System** - 14-day trial flow in app
+3. **Customer Onboarding** - Step-by-step setup wizard
+4. **Usage Limits** - Trial vs paid tier restrictions
 
-### Medium-term (Next 2 Weeks)
-1. Customer dashboard (embed code generator)
-2. Email automation sequences
-3. 14-day free trial system
-4. Customer support docs
+### Phase 3: Enterprise Features
+1. **Custom Knowledge Injection** - Admin adds info beyond scrape
+2. **Conversation Routing** - Route complex calls to humans
+3. **Multi-language Support** - Emma in Spanish, French, etc.
+4. **API Access** - Third-party integrations
 
-### Long-term (Sales Phase)
-1. Customer acquisition campaign
-2. Landing page optimization
-3. Sales outreach automation
-4. Customer success tracking
+### Phase 4: Go-to-Market
+1. **Customer Landing Page** - Product marketing site
+2. **Sales Outreach** - Identify and reach target businesses
+3. **Case Studies** - Document customer success stories
+4. **Partner Program** - Affiliate sales model
+
+### Immediate Maintenance
+1. Test with more websites (validate scraper quality)
+2. Monitor Vapi API costs
+3. Track email deliverability rates
+4. Gather customer feedback on voice quality
 
 ---
 
@@ -253,18 +296,49 @@ To restore: Check git history for commit `1ccd218` (Complete Vapi voice call int
 
 ---
 
-## 📞 Next Action
+## 🎬 Latest Session Summary (2026-03-13)
 
-**Right now:** Restart dev server and test the browser-based voice
+**What Was Done:**
+- ✅ Fixed Vapi integration to use @vapi-ai/web npm package (vs CDN)
+- ✅ Integrated Claude Anthropic as voice AI backbone
+- ✅ Enhanced website scraper to crawl property detail pages
+- ✅ Implemented deep data extraction (bedrooms, bathrooms, amenities, pricing)
+- ✅ Voice agent now answers detailed questions with full business context
+- ✅ Both chat and voice use same FAQ/property knowledge base
+- ✅ Tested end-to-end - fully functional demo!
+- ✅ Pushed to GitHub (commit: 74c30ca)
 
+**Current Abilities:**
+- Emma answers "How many cabins?" with specifics
+- Voice provides amenities, pricing, capacity details
+- All scraped data available to both chat & voice
+- No phone number needed - all in-browser
+
+**Quick Resume:**
 ```bash
-npm run dev
+npm run dev  # Start dev server on http://localhost:3011
+# Go to home page, scrape a website, get demo token, test voice + chat
 ```
 
-Then test the voice call from the demo - no phone number needed!
+**Key Test URLs:**
+- Home: http://localhost:3011
+- Example demo: http://localhost:3011/demo/5b7f7d6e-0d0c-4eb0-845a-6fb77b2d6cb0
+- Dashboard: http://localhost:3011/dashboard
+
+**Files Changed (Latest):**
+- `src/components/DemoHeroPage.tsx` - Enhanced system prompt with FAQ data
+- `src/lib/scraper.ts` - Deep property page crawling
+- `src/app/api/voice/start/route.ts` - Voice initialization logic
+- `package.json` - Added @vapi-ai/web dependency
+
+**Known Limitations:**
+- WebRTC transport disconnect warning (harmless, doesn't block functionality)
+- Some websites may need custom selectors for property page detection
+- Voice quality depends on Vapi service quality in user's region
 
 ---
 
-**Status:** 95% Complete - Ready for Full Testing
+**MVP Status:** 🎉 COMPLETE & WORKING
 **Date:** 2026-03-13
-**Voice Mode:** Browser-based (Web Client) - Outbound phone calls available in git history
+**Voice Mode:** Browser-based (Vapi Web Client + Claude Anthropic)
+**Ready for:** Customer testing, feature expansion, monetization setup
