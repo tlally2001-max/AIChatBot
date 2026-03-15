@@ -142,7 +142,7 @@ export function DemoHeroPage({
       const customAssistant: any = {
         model: {
           provider: 'openai',
-          model: 'gpt-4o-mini', // Fastest model - ~390ms latency
+          model: 'gpt-4o-mini', // Try GPT-4o mini
           systemPrompt: systemPrompt,
           temperature: 0.7,
         },
