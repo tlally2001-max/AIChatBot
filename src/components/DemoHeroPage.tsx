@@ -141,8 +141,8 @@ export function DemoHeroPage({
       // Create custom assistant with optimized settings for speed
       const customAssistant: any = {
         model: {
-          provider: 'anthropic',
-          model: 'claude-opus-4-6', // Revert to known working model
+          provider: 'openai',
+          model: 'gpt-4o-mini', // Fastest model - ~390ms latency
           systemPrompt: systemPrompt,
           temperature: 0.7,
         },
