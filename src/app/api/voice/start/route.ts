@@ -80,7 +80,13 @@ export async function POST(request: NextRequest) {
       message: '🎤 Voice session ready. Click to start speaking!',
     })
   } catch (error) {
-    console.error('Voice start error:', error)
-    return NextResponse.json({ error: 'Failed to start voice session' }, { status: 500 })
+    const errorMessage = error instanceof Error ? error.message : String(error)
+    const errorStack = error instanceof Error ? error.stack : ''
+    console.error('❌ Voice start error:', errorMessage)
+    console.error('Stack:', errorStack)
+    return NextResponse.json({
+      error: 'Failed to start voice session',
+      details: errorMessage
+    }, { status: 500 })
   }
 }
