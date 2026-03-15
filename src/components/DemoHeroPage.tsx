@@ -149,7 +149,9 @@ export function DemoHeroPage({
         voice: {
           provider: 'openai',
           voiceId: 'alloy',
+          voiceStreamingMode: 'streaming-voice-mode', // Enable sentence-level streaming
         },
+        voiceStreamingMode: 'streaming-voice-mode', // Streaming at assistant level
         firstMessageMode: 'assistant-speaks-first',
         endCallMessage: 'Thank you for calling! Goodbye!',
       }
