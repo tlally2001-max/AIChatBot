@@ -84,18 +84,19 @@ export function DemoHeroPage({
           // Pre-warm the TTS voice (saves 100-200ms on first call)
           try {
             const warmupVapi = new Vapi(process.env.NEXT_PUBLIC_VAPI_API_KEY || '')
-            await warmupVapi.start({
+            const warmupConfig: any = {
               model: {
                 provider: 'anthropic',
                 model: 'claude-3-5-sonnet-20241022',
-                systemPrompt: 'Say hello',
+                systemPrompt: 'Say hello briefly',
                 stream: true,
               },
               voice: {
                 provider: 'openai',
                 voiceId: 'alloy',
               },
-            })
+            }
+            await warmupVapi.start(warmupConfig)
             // Stop immediately after warming up
             setTimeout(() => {
               try {
