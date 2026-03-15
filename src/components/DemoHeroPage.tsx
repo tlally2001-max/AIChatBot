@@ -142,9 +142,10 @@ export function DemoHeroPage({
       const customAssistant: any = {
         model: {
           provider: 'anthropic',
-          model: 'claude-sonnet-4-20250514', // Claude 4 Sonnet - faster than Opus
+          model: 'claude-sonnet-4-20250514', // Claude 4 Sonnet - fast model
           systemPrompt: systemPrompt,
-          temperature: 0.7,
+          temperature: 0.3, // Lower temp = tighter, faster responses (avoid rambling)
+          maxTokens: 275, // 250-300 range: ~2-3 sentences, prevents rambling
         },
         voice: {
           provider: 'openai',
