@@ -87,7 +87,7 @@ export function DemoHeroPage({
             const warmupConfig: any = {
               model: {
                 provider: 'anthropic',
-                model: 'claude-3-5-sonnet',
+                model: 'claude-opus-4-6',
                 systemPrompt: 'Say hello briefly',
               },
               voice: {
@@ -168,7 +168,7 @@ export function DemoHeroPage({
       const customAssistant: any = {
         model: {
           provider: 'anthropic',
-          model: 'claude-3-5-sonnet', // Vapi model name format
+          model: 'claude-opus-4-6', // Known working model
           systemPrompt: systemPrompt,
           temperature: 0.7,
         },
