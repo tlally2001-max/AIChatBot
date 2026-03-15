@@ -87,7 +87,7 @@ export function DemoHeroPage({
             const warmupConfig: any = {
               model: {
                 provider: 'anthropic',
-                model: 'claude-opus-4-6',
+                model: 'claude-sonnet-4-20250514',
                 systemPrompt: 'Say hello briefly',
               },
               voice: {
@@ -168,7 +168,7 @@ export function DemoHeroPage({
       const customAssistant: any = {
         model: {
           provider: 'anthropic',
-          model: 'claude-opus-4-6', // Known working model
+          model: 'claude-sonnet-4-20250514', // Claude 4 Sonnet - faster than Opus
           systemPrompt: systemPrompt,
           temperature: 0.7,
         },
