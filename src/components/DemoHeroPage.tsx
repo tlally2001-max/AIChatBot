@@ -145,14 +145,11 @@ export function DemoHeroPage({
           model: 'claude-sonnet-4-20250514', // Claude 4 Sonnet - fast model
           systemPrompt: systemPrompt,
           temperature: 0.3, // Lower temp = tighter, faster responses (avoid rambling)
-          maxTokens: 275, // 250-300 range: ~2-3 sentences, prevents rambling
         },
         voice: {
           provider: 'openai',
           voiceId: 'alloy',
-          voiceStreamingMode: 'streaming-voice-mode', // Enable sentence-level streaming
         },
-        voiceStreamingMode: 'streaming-voice-mode', // Streaming at assistant level
         firstMessageMode: 'assistant-speaks-first',
         endCallMessage: 'Thank you for calling! Goodbye!',
       }
