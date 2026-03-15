@@ -81,34 +81,8 @@ export function DemoHeroPage({
           voiceConfigRef.current = data
           console.log('✅ Voice config pre-loaded')
 
-          // Pre-warm the TTS voice (saves 100-200ms on first call)
-          try {
-            const warmupVapi = new Vapi(process.env.NEXT_PUBLIC_VAPI_API_KEY || '')
-            const warmupConfig: any = {
-              model: {
-                provider: 'anthropic',
-                model: 'claude-sonnet-4-20250514',
-                systemPrompt: 'Say hello briefly',
-              },
-              voice: {
-                provider: 'openai',
-                voiceId: 'alloy',
-              },
-            }
-            await warmupVapi.start(warmupConfig)
-            // Stop immediately after warming up
-            setTimeout(() => {
-              try {
-                warmupVapi.stop()
-              } catch (e) {
-                // Voice might already be stopping
-              }
-            }, 100)
-            console.log('🎤 Voice warmed up')
-          } catch (e) {
-            // Warmup is optional, don't block on failure
-            console.log('Voice warmup skipped:', e)
-          }
+          // Note: Voice warmup disabled - browser requires user gesture for audio
+          // Microphone permission is requested on actual voice call
         }
       } catch (error) {
         console.error('Pre-load error:', error)
