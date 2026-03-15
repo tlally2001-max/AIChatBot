@@ -161,6 +161,15 @@ export function DemoHeroPage({
   const handleStartVoiceCall = async () => {
     setVoiceLoading(true)
     try {
+      // Destroy any existing Vapi instance first
+      if (vapiRef.current) {
+        try {
+          await vapiRef.current.stop()
+        } catch (e) {
+          console.log('Cleanup previous Vapi instance:', e)
+        }
+      }
+
       // Initialize Vapi client immediately (don't wait for this)
       const vapi = new Vapi(process.env.NEXT_PUBLIC_VAPI_API_KEY || '')
       vapiRef.current = vapi
@@ -358,7 +367,7 @@ export function DemoHeroPage({
                         src={websiteUrl}
                         className="w-full h-full border-0"
                         title="Website Preview"
-                        sandbox="allow-scripts allow-popups allow-forms allow-navigation"
+                        sandbox="allow-scripts allow-popups allow-forms allow-same-origin"
                       />
                     ) : (
                       <div className="flex items-center justify-center h-full bg-gray-50">

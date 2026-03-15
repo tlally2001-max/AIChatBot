@@ -65,7 +65,7 @@ export async function PhoneDemoPreview() {
                     src={websiteUrl}
                     className="w-full h-full border-0"
                     title="Website Demo"
-                    sandbox="allow-scripts allow-popups allow-forms allow-navigation"
+                    sandbox="allow-scripts allow-popups allow-forms allow-same-origin"
                     style={{ pointerEvents: 'auto' }}
                   />
                 </>
