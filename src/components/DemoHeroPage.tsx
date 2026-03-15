@@ -87,9 +87,8 @@ export function DemoHeroPage({
             const warmupConfig: any = {
               model: {
                 provider: 'anthropic',
-                model: 'claude-3-5-sonnet-20241022',
+                model: 'claude-3-5-sonnet',
                 systemPrompt: 'Say hello briefly',
-                stream: true,
               },
               voice: {
                 provider: 'openai',
@@ -169,10 +168,9 @@ export function DemoHeroPage({
       const customAssistant: any = {
         model: {
           provider: 'anthropic',
-          model: 'claude-3-5-sonnet-20241022', // Faster model
+          model: 'claude-3-5-sonnet', // Vapi model name format
           systemPrompt: systemPrompt,
           temperature: 0.7,
-          stream: true, // Enable token streaming
         },
         voice: {
           provider: 'openai',
