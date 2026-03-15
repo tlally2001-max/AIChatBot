@@ -150,7 +150,7 @@ export function DemoHeroPage({
           provider: 'openai',
           voiceId: 'alloy',
         },
-        firstMessageMode: 'assistant-speaks-first',
+        firstMessage: `Hi! I'm Emma with ${data.businessName || 'your business'}. How can I help you today?`,
         endCallMessage: 'Thank you for calling! Goodbye!',
       }
 
