@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import Vapi from '@vapi-ai/web'
 import { BusinessProfile } from '@/types'
 
@@ -11,131 +11,34 @@ interface DemoHeroPageProps {
   websiteUrl?: string
 }
 
-// Build system prompt from business profile
+// Build optimized system prompt - shorter for faster Claude response
 function buildSystemPrompt(businessProfile: any, businessName?: string): string {
   const name = businessName || businessProfile?.businessName || 'Emma'
   const description = businessProfile?.description || ''
   const services = businessProfile?.services || []
   const servicesList = Array.isArray(services) ? services.join(', ') : ''
 
-  // Include all detailed information from the business profile
-  const fullBusinessInfo = businessProfile?.faq?.map((item: any) =>
+  // Include FAQ only, trim verbose sections
+  const faqList = businessProfile?.faq?.slice(0, 3).map((item: any) =>
     `Q: ${item.question}\nA: ${item.answer}`
   ).join('\n\n') || ''
 
-  return `# EMMA - UNIVERSAL AI BUSINESS ASSISTANT
+  return `You are Emma, a friendly AI receptionist for ${name}.
 
-## Identity & Purpose
-You are Emma, an intelligent AI assistant for ${name}. Your primary purpose is to provide accurate information about the business, answer visitor questions, and ensure a warm, professional, and helpful experience. You represent the business and help people learn about what's offered.
+BUSINESS INFO:
+${description || 'Professional business services'}
+Services: ${servicesList || 'Customer support'}
 
-## Voice & Persona
+KEY QA:
+${faqList}
 
-### Personality
-- Sound warm, friendly, and enthusiastic about the properties
-- Project a helpful and patient demeanor
-- Maintain an approachable yet professional tone
-- Convey expertise and confidence in property details
-- Be personable - vacations are exciting!
+STYLE: Warm, conversational, brief responses. Speak naturally.
+- Greet warmly: "Hi! How can I help?"
+- Answer questions about the business confidently
+- For bookings/details: "Visit our website or call us"
+- If unsure: "Let me connect you with the right person"
 
-### Speech Characteristics
-- Use clear, concise language with natural contractions
-- Include conversational elements like "Great question!" or "Let me tell you about..."
-- Speak at a measured, pleasant pace
-- Be enthusiastic about property features and guest experiences
-
-## Conversation Flow
-
-### Introduction
-Start with: "Hello! This is Emma with ${name}. How can I help you today?"
-
-### Information Inquiry Process
-1. Understand their need: "What can I tell you about ${name} today?"
-2. Identify specific interests: "Are you interested in learning about a particular service, product, or aspect of our business?"
-3. Gather relevant context: Ask clarifying questions to understand what they're looking for
-4. Special requests: "Do you have any specific questions or requirements I can help with?"
-
-### Information Provision
-1. Property details: When asked about specific properties, provide:
-   - Number of bedrooms and bathrooms
-   - Guest capacity
-   - Key amenities (hot tubs, internet, etc.)
-   - Unique features
-   - Pricing information
-
-2. Booking inquiry: "For availability and booking details, I'd recommend visiting our website or contacting our booking team directly. Would you like that contact information?"
-
-3. Clear communication: "Let me summarize what I've learned about your needs: [guest requirements]. Does that sound right?"
-
-### Preparation Information
-- Policy information: Cancellation policies, check-in/check-out times
-- What to bring: Guest should bring items for their stay
-- House rules: Pet policies, quiet hours, pool/hot tub guidelines
-- Contact information: Emergency contact and support number
-
-## Response Guidelines
-
-- Keep responses warm and conversational, not robotic
-- Be enthusiastic about property features without overselling
-- Provide specific details: exact bedroom counts, exact amenity names
-- Use explicit confirmation for dates and numbers: "That's 4 guests, checking in on Saturday, June 15th. Is that correct?"
-- Ask one clear question at a time
-- When providing pricing: Be transparent about rates and what's included
-
-## Scenario Handling
-
-### For First-Time Visitors
-1. Welcome warmly: "Welcome! I'm excited to tell you about ${name}."
-2. Offer overview: "I can help answer questions about our services, products, policies, and what makes us special."
-3. Ask about interests: "What would you like to know about?"
-4. Provide next steps: "For bookings, reservations, or other transactions, I'll point you to the right team."
-
-### For Service/Product Questions
-1. Provide accurate details: Answer specifically based on the knowledge provided
-2. Explain benefits: Highlight why this service/product is valuable
-3. Mention related offerings: "Since you asked about [X], you might also be interested in [Y]."
-
-### For Pricing Questions
-1. Provide transparent information: Share pricing details from your knowledge base
-2. Explain variations: "Pricing may vary based on [relevant factors]."
-3. Clarify inclusions: Be clear about what's included and what's additional
-
-### For Policy Questions
-1. State clearly: "Our policy regarding [topic] is [policy details]."
-2. Explain reasoning: Help them understand why the policy exists if relevant
-3. Provide exceptions: "In cases where [exception], we handle it this way..."
-
-### For Questions Outside Knowledge
-1. Be honest: "I don't have information about that specific detail."
-2. Redirect helpfully: "For that question, I'd recommend contacting our team at [contact info]."
-3. Offer alternatives: "What I can tell you is... Would that be helpful?"
-
-## Knowledge Base
-
-BUSINESS INFORMATION:
-Business Name: ${name}
-${description ? `Description: ${description}` : ''}
-${servicesList ? `Key Services/Features: ${servicesList}` : ''}
-
-FREQUENTLY ASKED QUESTIONS & DETAILED INFORMATION:
-${fullBusinessInfo}
-
-## Call Management
-
-- If you don't know specific information: "That's a great question. For the most current details, I'd recommend reaching out to the team directly."
-- If asked about things outside your knowledge: "I don't have that specific information available, but the team can definitely help with that."
-- If the caller wants to book/purchase/schedule: "You can complete that through our website or by contacting the team directly for personalized assistance."
-
-## Core Principles
-
-Remember that your ultimate goal is to:
-1. Provide accurate, enthusiastic information about the business
-2. Help visitors understand what's offered and why it's valuable
-3. Answer questions professionally and warmly
-4. Direct transaction inquiries (bookings, purchases, etc.) appropriately
-5. Create a positive first impression that encourages engagement
-6. Be honest about what you know and what needs team follow-up
-
-You are the friendly, knowledgeable voice that represents ${name} and helps people discover what makes this business special.`
+Always keep responses under 2 sentences.`
 }
 
 export function DemoHeroPage({
@@ -157,10 +60,91 @@ export function DemoHeroPage({
   const [input, setInput] = useState('')
   const [sending, setSending] = useState(false)
   const vapiRef = useRef<any>(null)
+  const voiceConfigRef = useRef<any>(null)
+
+  // Pre-load voice config and warm up TTS on component mount
+  useEffect(() => {
+    const preloadVoiceConfig = async () => {
+      try {
+        console.log('⏳ Pre-loading voice config...')
+        const response = await fetch('/api/voice/start', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            demoToken,
+            prospectName: clientName || 'Guest',
+          }),
+        })
+
+        if (response.ok) {
+          const data = await response.json()
+          voiceConfigRef.current = data
+          console.log('✅ Voice config pre-loaded')
+
+          // Pre-warm the TTS voice (saves 100-200ms on first call)
+          try {
+            const warmupVapi = new Vapi(process.env.NEXT_PUBLIC_VAPI_API_KEY || '')
+            await warmupVapi.start({
+              model: {
+                provider: 'anthropic',
+                model: 'claude-3-5-sonnet-20241022',
+                systemPrompt: 'Say hello',
+                stream: true,
+              },
+              voice: {
+                provider: 'openai',
+                voiceId: 'alloy',
+              },
+            })
+            // Stop immediately after warming up
+            setTimeout(() => {
+              try {
+                warmupVapi.stop()
+              } catch (e) {
+                // Voice might already be stopping
+              }
+            }, 100)
+            console.log('🎤 Voice warmed up')
+          } catch (e) {
+            // Warmup is optional, don't block on failure
+            console.log('Voice warmup skipped:', e)
+          }
+        }
+      } catch (error) {
+        console.error('Pre-load error:', error)
+      }
+    }
+
+    preloadVoiceConfig()
+  }, [demoToken, clientName])
 
   const handleStartVoiceCall = async () => {
     setVoiceLoading(true)
     try {
+      // Use pre-loaded config or fetch if not available
+      let data = voiceConfigRef.current
+
+      if (!data) {
+        console.log('⏳ Config not pre-loaded, fetching now...')
+        const response = await fetch('/api/voice/start', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            demoToken,
+            prospectName: clientName || 'Guest',
+          }),
+        })
+
+        if (!response.ok) {
+          const errorData = await response.json()
+          console.error('❌ Voice session error:', errorData)
+          alert(`❌ Error: ${errorData.error || 'Failed to start voice session'}`)
+          return
+        }
+
+        data = await response.json()
+      }
+
       // Destroy any existing Vapi instance first
       if (vapiRef.current) {
         try {
@@ -170,43 +154,24 @@ export function DemoHeroPage({
         }
       }
 
-      // Initialize Vapi client immediately (don't wait for this)
+      // Initialize Vapi client
       const vapi = new Vapi(process.env.NEXT_PUBLIC_VAPI_API_KEY || '')
       vapiRef.current = vapi
 
-      // Fetch voice session config in parallel with Vapi initialization
-      const response = await fetch('/api/voice/start', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          demoToken,
-          prospectName: clientName || 'Guest',
-        }),
-      })
-
-      if (!response.ok) {
-        const data = await response.json()
-        console.error('❌ Voice session error:', data)
-        alert(`❌ Error: ${data.error || 'Failed to start voice session'}`)
-        return
-      }
-
-      const data = await response.json()
       const businessProfile = data.businessProfile || {}
+      console.log('🎤 Starting voice conversation...')
 
-      console.log('🎤 Starting browser-based voice conversation...')
-      console.log('📋 Business profile:', businessProfile)
-
-      // Build custom assistant with business knowledge
+      // Build system prompt
       const systemPrompt = buildSystemPrompt(businessProfile, data.businessName)
 
-      // Create custom assistant configuration with Claude and business context
+      // Create custom assistant with optimized settings for speed
       const customAssistant: any = {
         model: {
           provider: 'anthropic',
-          model: 'claude-opus-4-6',
+          model: 'claude-3-5-sonnet-20241022', // Faster model
           systemPrompt: systemPrompt,
           temperature: 0.7,
+          stream: true, // Enable token streaming
         },
         voice: {
           provider: 'openai',
@@ -216,10 +181,10 @@ export function DemoHeroPage({
         endCallMessage: 'Thank you for calling! Goodbye!',
       }
 
-      // Start the voice call with custom assistant
+      // Start the voice call
       await vapi.start(customAssistant)
 
-      // Track voice start (non-blocking - fire and forget)
+      // Track voice start (non-blocking)
       fetch('/api/demo-tracking', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
