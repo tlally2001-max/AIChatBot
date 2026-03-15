@@ -161,7 +161,11 @@ export function DemoHeroPage({
   const handleStartVoiceCall = async () => {
     setVoiceLoading(true)
     try {
-      // Initialize voice session with backend
+      // Initialize Vapi client immediately (don't wait for this)
+      const vapi = new Vapi(process.env.NEXT_PUBLIC_VAPI_API_KEY || '')
+      vapiRef.current = vapi
+
+      // Fetch voice session config in parallel with Vapi initialization
       const response = await fetch('/api/voice/start', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -181,13 +185,8 @@ export function DemoHeroPage({
       const data = await response.json()
       const businessProfile = data.businessProfile || {}
 
-      // Initialize Vapi with browser-based voice using the installed package
       console.log('🎤 Starting browser-based voice conversation...')
       console.log('📋 Business profile:', businessProfile)
-
-      const vapi = new Vapi(process.env.NEXT_PUBLIC_VAPI_API_KEY || '')
-
-      vapiRef.current = vapi
 
       // Build custom assistant with business knowledge
       const systemPrompt = buildSystemPrompt(businessProfile, data.businessName)
@@ -211,7 +210,7 @@ export function DemoHeroPage({
       // Start the voice call with custom assistant
       await vapi.start(customAssistant)
 
-      // Log voice start
+      // Track voice start (non-blocking - fire and forget)
       fetch('/api/demo-tracking', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
