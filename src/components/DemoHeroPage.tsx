@@ -141,8 +141,8 @@ export function DemoHeroPage({
       // Create custom assistant with optimized settings for speed
       const customAssistant: any = {
         model: {
-          provider: 'openai',
-          model: 'gpt-4o-mini-cluster', // GPT-4o Mini Cluster from Vapi dashboard
+          provider: 'anthropic',
+          model: 'claude-opus-4-6', // Claude - reliable, works with dynamic assistants
           systemPrompt: systemPrompt,
           temperature: 0.7,
         },
