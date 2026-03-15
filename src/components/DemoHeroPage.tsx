@@ -142,7 +142,7 @@ export function DemoHeroPage({
       const customAssistant: any = {
         model: {
           provider: 'openai',
-          model: 'gpt-4o-mini', // Try GPT-4o mini
+          model: 'gpt-4o-mini-cluster', // GPT-4o Mini Cluster from Vapi dashboard
           systemPrompt: systemPrompt,
           temperature: 0.7,
         },
