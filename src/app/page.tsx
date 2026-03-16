@@ -33,7 +33,7 @@ export default async function Home() {
                 </div>
 
                 <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight text-white">
-                  24/7 AI-Powered <span className="text-transparent bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text">Lead Capture</span>
+                  24/7 AI-Powered <span className="text-transparent bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text">Free Lead Capture Demo</span>
                 </h1>
 
                 <p className="text-xl text-gray-300 mb-8 leading-relaxed max-w-lg">
