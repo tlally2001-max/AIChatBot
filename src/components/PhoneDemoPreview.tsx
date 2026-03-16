@@ -33,7 +33,7 @@ export async function PhoneDemoPreview() {
             </div>
 
             {/* Call label */}
-            <div className="text-center mt-4">
+            <div className="text-center mt-3">
               <p className="text-blue-300 text-xs font-semibold tracking-widest uppercase">AI Receptionist</p>
               <p className="text-white text-2xl font-bold mt-1">Emma</p>
               <p className="text-green-400 text-sm mt-1 flex items-center justify-center gap-1.5">
@@ -42,35 +42,63 @@ export async function PhoneDemoPreview() {
               </p>
             </div>
 
-            {/* Avatar with ring animation */}
-            <div className="flex justify-center mt-6 relative">
-              {/* Outer pulse rings */}
-              <div className="absolute w-32 h-32 rounded-full bg-blue-500/10 animate-ping" style={{ animationDuration: '2s' }}></div>
-              <div className="absolute w-28 h-28 rounded-full bg-blue-500/15 animate-ping" style={{ animationDuration: '2s', animationDelay: '0.4s' }}></div>
-              <div className="absolute w-24 h-24 rounded-full bg-blue-500/20 animate-ping" style={{ animationDuration: '2s', animationDelay: '0.8s' }}></div>
-              {/* Avatar */}
-              <div className="relative w-20 h-20 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center shadow-2xl shadow-blue-500/50 z-10">
-                <span className="text-4xl">🤖</span>
+            {/* Voice Orb */}
+            <div className="flex justify-center mt-5">
+              <div className="relative w-28 h-28">
+                {/* Outer glow rings */}
+                <div className="absolute inset-0 rounded-full bg-indigo-500/20 animate-ping" style={{ animationDuration: '2.5s' }}></div>
+                <div className="absolute inset-2 rounded-full bg-indigo-500/15 animate-ping" style={{ animationDuration: '2.5s', animationDelay: '0.6s' }}></div>
+
+                {/* Orb background circle */}
+                <div className="absolute inset-0 rounded-full bg-indigo-600 shadow-2xl shadow-indigo-500/60"></div>
+
+                {/* White border ring */}
+                <div className="absolute inset-1 rounded-full border-4 border-white/90 overflow-hidden">
+                  {/* Wave layers inside the orb */}
+                  <div className="absolute inset-0 bg-indigo-600">
+                    {/* Wave 1 - bottom large */}
+                    <svg
+                      className="absolute w-full"
+                      style={{ bottom: '15%', animationName: 'waveSlide', animationDuration: '3s', animationTimingFunction: 'linear', animationIterationCount: 'infinite' }}
+                      viewBox="0 0 200 60"
+                      preserveAspectRatio="none"
+                    >
+                      <path
+                        d="M0 40 Q25 10 50 30 Q75 50 100 30 Q125 10 150 30 Q175 50 200 30 L200 60 L0 60 Z"
+                        fill="rgba(255,255,255,0.25)"
+                      />
+                    </svg>
+                    {/* Wave 2 - middle */}
+                    <svg
+                      className="absolute w-full"
+                      style={{ bottom: '25%', animationName: 'waveSlideReverse', animationDuration: '2.2s', animationTimingFunction: 'linear', animationIterationCount: 'infinite' }}
+                      viewBox="0 0 200 60"
+                      preserveAspectRatio="none"
+                    >
+                      <path
+                        d="M0 35 Q30 5 60 25 Q90 45 120 25 Q150 5 180 25 Q195 35 200 30 L200 60 L0 60 Z"
+                        fill="rgba(255,255,255,0.18)"
+                      />
+                    </svg>
+                    {/* Wave 3 - top subtle */}
+                    <svg
+                      className="absolute w-full"
+                      style={{ bottom: '35%', animationName: 'waveSlide', animationDuration: '1.8s', animationTimingFunction: 'linear', animationIterationCount: 'infinite' }}
+                      viewBox="0 0 200 50"
+                      preserveAspectRatio="none"
+                    >
+                      <path
+                        d="M0 30 Q20 10 40 25 Q60 40 80 22 Q100 5 120 22 Q140 38 160 22 Q180 5 200 25 L200 50 L0 50 Z"
+                        fill="rgba(200,200,255,0.15)"
+                      />
+                    </svg>
+                  </div>
+                </div>
               </div>
             </div>
 
-            {/* Waveform */}
-            <div className="flex items-center justify-center gap-1 mt-8 h-10">
-              {[3, 6, 9, 12, 8, 14, 10, 6, 11, 7, 13, 9, 5, 10, 7].map((h, i) => (
-                <div
-                  key={i}
-                  className="w-1 bg-blue-400 rounded-full animate-bounce opacity-80"
-                  style={{
-                    height: `${h * 2}px`,
-                    animationDuration: `${0.6 + (i % 4) * 0.15}s`,
-                    animationDelay: `${(i * 0.07) % 0.5}s`,
-                  }}
-                ></div>
-              ))}
-            </div>
-
             {/* Transcript bubble */}
-            <div className="mx-4 mt-6 bg-white/10 backdrop-blur-sm rounded-2xl px-4 py-3 border border-white/10">
+            <div className="mx-4 mt-5 bg-white/10 backdrop-blur-sm rounded-2xl px-4 py-3 border border-white/10">
               <p className="text-white/90 text-xs leading-relaxed text-center italic">
                 &ldquo;Hi! I&apos;m Emma. How can I help you today?&rdquo;
               </p>
@@ -118,8 +146,19 @@ export async function PhoneDemoPreview() {
         </div>
 
         {/* Glow */}
-        <div className="absolute inset-0 rounded-[3rem] bg-blue-500/15 blur-2xl -z-10 scale-95"></div>
+        <div className="absolute inset-0 rounded-[3rem] bg-indigo-500/15 blur-2xl -z-10 scale-95"></div>
       </div>
+
+      <style>{`
+        @keyframes waveSlide {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        @keyframes waveSlideReverse {
+          0% { transform: translateX(-50%); }
+          100% { transform: translateX(0); }
+        }
+      `}</style>
     </div>
   )
 }
