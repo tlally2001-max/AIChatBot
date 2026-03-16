@@ -34,7 +34,8 @@ export async function POST(request: NextRequest) {
         model: 'claude-opus-4-6',
         max_tokens: 1024,
         system: systemPrompt,
-        messages: conversationHistory.map(
+        // Limit to last 6 messages (3 exchanges) to reduce payload and latency
+        messages: conversationHistory.slice(-6).map(
           (msg: { role: string; content: string }) => ({
             role: msg.role === 'assistant' ? 'assistant' : 'user',
             content: msg.content,

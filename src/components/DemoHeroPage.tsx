@@ -61,10 +61,13 @@ export function DemoHeroPage({
   const [sending, setSending] = useState(false)
   const vapiRef = useRef<any>(null)
   const voiceConfigRef = useRef<any>(null)
+  const preloadingRef = useRef<boolean>(false) // Fix race condition
 
-  // Pre-load voice config and warm up TTS on component mount
+  // Pre-load voice config on component mount
   useEffect(() => {
     const preloadVoiceConfig = async () => {
+      if (preloadingRef.current) return // Prevent double-fetch
+      preloadingRef.current = true
       try {
         console.log('⏳ Pre-loading voice config...')
         const response = await fetch('/api/voice/start', {
@@ -80,9 +83,6 @@ export function DemoHeroPage({
           const data = await response.json()
           voiceConfigRef.current = data
           console.log('✅ Voice config pre-loaded')
-
-          // Note: Voice warmup disabled - browser requires user gesture for audio
-          // Microphone permission is requested on actual voice call
         }
       } catch (error) {
         console.error('Pre-load error:', error)
@@ -119,12 +119,15 @@ export function DemoHeroPage({
         data = await response.json()
       }
 
-      // Destroy any existing Vapi instance first
+      // Stop existing call if active, reuse Vapi instance if possible
       if (vapiRef.current) {
         try {
-          await vapiRef.current.stop()
+          const stopPromise = vapiRef.current.stop()
+          const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error('stop timeout')), 500))
+          await Promise.race([stopPromise, timeout])
         } catch (e) {
-          console.log('Cleanup previous Vapi instance:', e)
+          // Timeout or already stopped - create fresh instance
+          vapiRef.current = null
         }
       }
 
