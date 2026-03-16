@@ -11,6 +11,16 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'URL is required' }, { status: 400 })
     }
 
+    // Check env vars
+    if (!process.env.SUPABASE_SECRET_KEY) {
+      console.error('❌ SUPABASE_SECRET_KEY is not set')
+      return NextResponse.json({ error: 'Server configuration error: missing SUPABASE_SECRET_KEY' }, { status: 500 })
+    }
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
+      console.error('❌ NEXT_PUBLIC_SUPABASE_URL is not set')
+      return NextResponse.json({ error: 'Server configuration error: missing SUPABASE_URL' }, { status: 500 })
+    }
+
     // Ensure URL has protocol
     const fullUrl = url.startsWith('http') ? url : `https://${url}`
 
@@ -39,8 +49,8 @@ export async function POST(request: NextRequest) {
       .single()
 
     if (dbError) {
-      console.error('❌ Database error:', dbError)
-      return NextResponse.json({ error: 'Failed to save demo' }, { status: 500 })
+      console.error('❌ Database error:', JSON.stringify(dbError))
+      return NextResponse.json({ error: `Database error: ${dbError.message} (code: ${dbError.code})` }, { status: 500 })
     }
 
     console.log(`✅ Public demo created: ${lead.demo_token}`)
