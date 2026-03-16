@@ -33,30 +33,30 @@ export default async function Home() {
                 </div>
 
                 <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight text-white">
-                  AI-Powered <span className="text-transparent bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text">Voice & Chat Agent</span>
+                  24/7 AI-Powered <span className="text-transparent bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text">Free Voice/Chat Agent Demo</span>
                 </h1>
 
                 <p className="text-xl text-gray-300 mb-8 leading-relaxed max-w-lg mx-auto">
-                  Automate customer conversations 24/7. Emma handles inquiries, answers questions, and qualifies leads so you can focus on closing deals.
+                  Never miss a customer inquiry again. Emma, your AI receptionist, handles chats and calls automatically while you focus on closing deals.
                 </p>
 
                 <ul className="space-y-3 mb-10 text-gray-300 inline-block text-left">
                   <li className="flex items-start gap-3">
                     <span className="text-blue-400 font-bold mt-1">✓</span>
-                    <span>Instant responses to customer inquiries</span>
+                    <span>Responds to customer questions instantly, 24/7</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <span className="text-blue-400 font-bold mt-1">✓</span>
-                    <span>Automatic lead qualification</span>
+                    <span>Captures qualified leads automatically</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <span className="text-blue-400 font-bold mt-1">✓</span>
-                    <span>Live in seconds, no setup required</span>
+                    <span>Trained on your business in minutes</span>
                   </li>
                 </ul>
 
                 <p className="text-sm text-gray-900 bg-white/90 rounded-lg px-3 py-2 inline-block mb-6">
-                  Enter your website URL and experience Emma live — no signup needed.
+                  Enter your website URL and see Emma live in ~15 seconds — no signup required.
                 </p>
 
                 <div className="flex justify-center">
@@ -98,34 +98,34 @@ export default async function Home() {
         {/* How It Works */}
         <section id="how-it-works" className="bg-gradient-to-b from-gray-50 to-white py-32">
           <div className="max-w-7xl mx-auto px-4">
-            <h2 className="text-5xl md:text-6xl font-black text-center mb-4">Get Started in 3 Steps</h2>
-            <p className="text-center text-gray-600 text-lg mb-16 max-w-2xl mx-auto">Deploy your AI agent in minutes, not months</p>
+            <h2 className="text-5xl md:text-6xl font-black text-center mb-4">How It Works</h2>
+            <p className="text-center text-gray-600 text-lg mb-16 max-w-2xl mx-auto">Three simple steps to get Emma live on your site</p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               <div className="text-center bg-white rounded-3xl p-8 shadow-md hover:shadow-2xl transition-all hover:scale-105">
                 <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-blue-500 text-white rounded-full flex items-center justify-center text-3xl font-black mx-auto mb-6">
-                  1
+                  1️⃣
                 </div>
-                <h3 className="text-2xl font-bold mb-3 text-gray-900">Share Your Website</h3>
+                <h3 className="text-2xl font-bold mb-3 text-gray-900">Add Your Website</h3>
                 <p className="text-gray-700 leading-relaxed">
-                  Enter your URL. We analyze your site to train Emma on your products, services, and brand voice.
+                  Give us your website URL. We scrape it and train Emma on your business, products, and services instantly.
                 </p>
               </div>
               <div className="text-center bg-white rounded-3xl p-8 shadow-md hover:shadow-2xl transition-all hover:scale-105">
                 <div className="w-16 h-16 bg-gradient-to-br from-indigo-600 to-indigo-500 text-white rounded-full flex items-center justify-center text-3xl font-black mx-auto mb-6">
-                  2
+                  2️⃣
                 </div>
-                <h3 className="text-2xl font-bold mb-3 text-gray-900">Embed the Code</h3>
+                <h3 className="text-2xl font-bold mb-3 text-gray-900">Copy One Line</h3>
                 <p className="text-gray-700 leading-relaxed">
-                  Add a single snippet to your website. Takes less than 2 minutes. No developer needed.
+                  We give you a single line of code. Paste it on your website. That's all you need to do.
                 </p>
               </div>
               <div className="text-center bg-white rounded-3xl p-8 shadow-md hover:shadow-2xl transition-all hover:scale-105">
                 <div className="w-16 h-16 bg-gradient-to-br from-green-600 to-green-500 text-white rounded-full flex items-center justify-center text-3xl font-black mx-auto mb-6">
-                  3
+                  3️⃣
                 </div>
-                <h3 className="text-2xl font-bold mb-3 text-gray-900">Start Converting</h3>
+                <h3 className="text-2xl font-bold mb-3 text-gray-900">Start Capturing Leads</h3>
                 <p className="text-gray-700 leading-relaxed">
-                  Emma is live. She handles calls and chats 24/7, qualifies leads, and routes hot prospects to you.
+                  Emma goes live immediately. She chats, qualifies prospects, and captures leads 24/7 automatically.
                 </p>
               </div>
             </div>
