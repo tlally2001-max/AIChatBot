@@ -229,58 +229,57 @@ export function DemoHeroPage({
 
       {/* Hero Section */}
       <div className="max-w-7xl mx-auto px-4 py-20">
-        <div className="grid grid-cols-2 gap-16 items-center">
-          {/* Left Content */}
-          <div>
+        <div className="flex flex-col gap-12">
+          {/* Text Content - Top, Centered */}
+          <div className="text-center max-w-2xl mx-auto">
             {/* Badge */}
             <div className="inline-block px-4 py-2 border border-blue-400 rounded-full text-blue-300 text-sm font-semibold mb-6">
               AI Receptionist Platform
             </div>
 
             {/* Heading */}
-            <h2 className="text-6xl font-black text-white mb-4">
-              24/7 AI-Powered
+            <h2 className="text-5xl md:text-7xl font-black text-white mb-6">
+              24/7 AI-Powered <span className="text-transparent bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text">Lead Capture</span>
             </h2>
-            <h2 className="text-5xl font-black text-transparent bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text mb-8">Lead Capture</h2>
 
             {/* Description */}
-            <p className="text-xl text-gray-300 mb-8 leading-relaxed max-w-lg">
+            <p className="text-xl text-gray-300 mb-8 leading-relaxed">
               Never miss a customer inquiry again. Emma, your AI receptionist, handles chats and calls automatically while you focus on closing deals.
             </p>
 
             {/* Bullet Points */}
-            <ul className="space-y-3 mb-10 text-gray-300">
+            <ul className="space-y-3 mb-10 text-gray-300 inline-block text-left">
               <li className="flex items-start gap-3">
-                <span className="text-green-500 font-bold mt-1">✓</span>
+                <span className="text-blue-400 font-bold mt-1">✓</span>
                 <span>Responds to customer questions instantly, 24/7</span>
               </li>
               <li className="flex items-start gap-3">
-                <span className="text-green-500 font-bold mt-1">✓</span>
+                <span className="text-blue-400 font-bold mt-1">✓</span>
                 <span>Captures qualified leads automatically</span>
               </li>
               <li className="flex items-start gap-3">
-                <span className="text-green-500 font-bold mt-1">✓</span>
+                <span className="text-blue-400 font-bold mt-1">✓</span>
                 <span>Trained on your business in minutes</span>
               </li>
             </ul>
 
             {/* Secondary Text */}
-            <p className="text-sm text-gray-400 italic mb-10">
-              See Emma in action on the right. She's powered by your actual website data and understands your business completely.
+            <p className="text-sm text-gray-400 mb-10">
+              See Emma in action below. She's powered by your actual website data and understands your business completely.
             </p>
 
             {/* CTA Buttons */}
-            <div className="flex gap-4">
+            <div className="flex gap-4 justify-center">
               <button className="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg transition-colors">
                 Start Your Free Trial
               </button>
-              <button className="px-8 py-4 border-2 border-gray-300 text-gray-700 hover:border-blue-400 hover:text-blue-600 font-bold rounded-lg transition-colors">
+              <button className="px-8 py-4 border-2 border-gray-300 text-gray-300 hover:border-blue-400 hover:text-blue-400 font-bold rounded-lg transition-colors">
                 Schedule Demo
               </button>
             </div>
           </div>
 
-          {/* Right - iPhone Mockup */}
+          {/* iPhone/Chat Interface - Below */}
           <div className="flex justify-center">
             <div className="relative w-96">
               {/* iPhone Frame */}
