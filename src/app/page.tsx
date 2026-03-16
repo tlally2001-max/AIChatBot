@@ -1,6 +1,7 @@
 import { ScrapeForm } from '@/components/ScrapeForm'
 import { LandingFAQ } from '@/components/LandingFAQ'
 import { PhoneDemoPreview } from '@/components/PhoneDemoPreview'
+import { PublicDemoForm } from '@/components/PublicDemoForm'
 import { Suspense } from 'react'
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
@@ -54,24 +55,11 @@ export default async function Home() {
                   </li>
                 </ul>
 
-                <p className="text-sm text-gray-400 italic mb-10">
-                  See Emma in action on the right. She's powered by your actual website data and understands your business completely.
+                <p className="text-sm text-gray-400 italic mb-6">
+                  Enter your website URL and see Emma live in ~15 seconds — no signup required.
                 </p>
 
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <Link
-                    href="/login"
-                    className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-200 text-center shadow-lg hover:shadow-xl"
-                  >
-                    Start Your Free Trial
-                  </Link>
-                  <Link
-                    href="/login"
-                    className="inline-block border border-gray-400 text-gray-300 hover:border-blue-400 hover:text-blue-400 px-8 py-4 rounded-lg font-semibold text-lg transition-all duration-200 text-center"
-                  >
-                    Schedule Demo
-                  </Link>
-                </div>
+                <PublicDemoForm />
               </div>
 
               {/* Right Side - Phone Mockup */}
