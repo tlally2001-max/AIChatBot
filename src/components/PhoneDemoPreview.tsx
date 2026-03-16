@@ -97,11 +97,26 @@ export async function PhoneDemoPreview() {
               </div>
             </div>
 
-            {/* Transcript bubble */}
-            <div className="mx-4 mt-5 bg-white/10 backdrop-blur-sm rounded-2xl px-4 py-3 border border-white/10">
-              <p className="text-white/90 text-xs leading-relaxed text-center italic">
-                &ldquo;Hi! I&apos;m Emma. How can I help you today?&rdquo;
-              </p>
+            {/* Transcript bubbles */}
+            <div className="mx-4 mt-5 space-y-2 text-xs">
+              {/* Emma greeting */}
+              <div className="bg-white/10 backdrop-blur-sm rounded-2xl px-3 py-2 border border-white/10">
+                <p className="text-white/90 leading-relaxed">
+                  &ldquo;Hi! I&apos;m Emma. I can answer questions about your business and book appointments. What can I help with?&rdquo;
+                </p>
+              </div>
+              {/* User question */}
+              <div className="text-right">
+                <div className="inline-block bg-blue-600/60 backdrop-blur-sm rounded-2xl px-3 py-2 border border-blue-400/30 max-w-[70%]">
+                  <p className="text-white/90 leading-relaxed">Do you have availability tomorrow?</p>
+                </div>
+              </div>
+              {/* Emma response */}
+              <div className="bg-white/10 backdrop-blur-sm rounded-2xl px-3 py-2 border border-white/10">
+                <p className="text-white/90 leading-relaxed">
+                  Yes! I have slots at 2pm and 4pm. Which works better?
+                </p>
+              </div>
             </div>
 
             {/* Call Controls */}
