@@ -100,7 +100,7 @@ export async function PhoneDemoPreview() {
             {/* Transcript bubble */}
             <div className="mx-4 mt-5 bg-white/10 backdrop-blur-sm rounded-2xl px-4 py-3 border border-white/10">
               <p className="text-white/90 text-xs leading-relaxed text-center">
-                &ldquo;Hi! I&apos;m Emma. I can answer your questions and book appointments for you. What do you need today?&rdquo;
+                &ldquo;Hi! I&apos;m Emma. I can answer questions about your business and book appointments for you. What do you need today?&rdquo;
               </p>
             </div>
 
