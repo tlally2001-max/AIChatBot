@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { createClient as createSupabaseClient } from '@supabase/supabase-js'
 import { scrapeWebsite } from '@/lib/scraper'
 import { buildBusinessProfile } from '@/lib/knowledge-base'
 
@@ -20,8 +20,11 @@ export async function POST(request: NextRequest) {
     const businessProfile = buildBusinessProfile(scrapedData)
     console.log(`✅ Business profile built: ${businessProfile.businessName}`)
 
-    // Use service role to insert without auth
-    const supabase = await createClient()
+    // Use secret key to bypass RLS for public demo inserts
+    const supabase = createSupabaseClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SECRET_KEY!
+    )
 
     const { data: lead, error: dbError } = await supabase
       .from('leads')

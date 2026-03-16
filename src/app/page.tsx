@@ -268,8 +268,12 @@ export default async function Home() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto">
-      <ScrapeForm />
+    <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-800 flex items-center justify-center px-4">
+      <div className="text-center max-w-2xl w-full">
+        <h1 className="text-5xl font-black text-white mb-4">Create a Demo</h1>
+        <p className="text-gray-300 text-xl mb-8">Enter any business website URL to generate an instant AI demo</p>
+        <PublicDemoForm />
+      </div>
     </div>
   )
 }
