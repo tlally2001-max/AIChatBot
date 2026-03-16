@@ -55,7 +55,7 @@ export default async function Home() {
                   </li>
                 </ul>
 
-                <p className="text-sm text-gray-400 italic mb-6">
+                <p className="text-sm text-gray-200 mb-6">
                   Enter your website URL and see Emma live in ~15 seconds — no signup required.
                 </p>
 
