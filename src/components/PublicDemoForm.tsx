@@ -45,7 +45,7 @@ export function PublicDemoForm() {
           placeholder="Enter your website URL..."
           required
           disabled={loading}
-          className="flex-1 px-5 py-4 rounded-xl text-gray-900 text-lg focus:outline-none focus:ring-2 focus:ring-blue-400 disabled:opacity-60"
+          className="flex-1 px-5 py-4 rounded-xl bg-white text-gray-900 text-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 disabled:opacity-60 shadow-lg"
         />
         <button
           type="submit"
