@@ -23,9 +23,9 @@ export default async function Home() {
 
           <div className="w-full px-4">
             <div className="max-w-7xl mx-auto">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center lg:order-none order-first">
-              {/* Left Side - Copy */}
-              <div className="text-center lg:text-left lg:order-none">
+              <div className="flex flex-col gap-12">
+              {/* Text Content - Top */}
+              <div className="text-center max-w-2xl mx-auto">
                 <div className="mb-6">
                   <span className="inline-block px-4 py-2 bg-blue-500/10 border border-blue-400/30 rounded-full text-blue-300 text-sm font-semibold">
                     AI Receptionist Platform
@@ -36,7 +36,7 @@ export default async function Home() {
                   24/7 AI-Powered <span className="text-transparent bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text">Free Voice/Chat Agent Demo</span>
                 </h1>
 
-                <p className="text-xl text-gray-300 mb-8 leading-relaxed max-w-lg lg:ml-0 mx-auto">
+                <p className="text-xl text-gray-300 mb-8 leading-relaxed">
                   Never miss a customer inquiry again. Emma, your AI receptionist, handles chats and calls automatically while you focus on closing deals.
                 </p>
 
@@ -59,14 +59,12 @@ export default async function Home() {
                   Enter your website URL and see Emma live in ~15 seconds — no signup required.
                 </p>
 
-                <div className="flex justify-center">
-                  <PublicDemoForm />
-                </div>
+                <PublicDemoForm />
               </div>
 
-              {/* Right Side - Phone Mockup */}
-              <div className="flex justify-center lg:justify-end lg:order-none order-last">
-                <Suspense fallback={<div className="flex justify-center lg:justify-end"><div className="w-80 h-96 bg-gray-700 rounded-3xl animate-pulse"></div></div>}>
+              {/* Phone Mockup - Below */}
+              <div className="flex justify-center">
+                <Suspense fallback={<div className="flex justify-center"><div className="w-80 h-96 bg-gray-700 rounded-3xl animate-pulse"></div></div>}>
                   <PhoneDemoPreview />
                 </Suspense>
               </div>
