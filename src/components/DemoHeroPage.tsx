@@ -238,12 +238,12 @@ export function DemoHeroPage({
             </div>
 
             {/* Heading */}
-            <h2 className="text-5xl md:text-7xl font-black text-white mb-6">
+            <h2 className="text-3xl md:text-7xl font-black text-white mb-6">
               24/7 AI-Powered <span className="text-transparent bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text">Lead Capture</span>
             </h2>
 
             {/* Description */}
-            <p className="text-xl text-gray-300 mb-8 leading-relaxed">
+            <p className="text-base md:text-xl text-gray-300 mb-8 leading-relaxed">
               Never miss a customer inquiry again. Emma, your AI receptionist, handles chats and calls automatically while you focus on closing deals.
             </p>
 
@@ -281,7 +281,7 @@ export function DemoHeroPage({
 
           {/* iPhone/Chat Interface - Below */}
           <div className="flex justify-center">
-            <div className="relative w-96">
+            <div className="relative w-80 md:w-96">
               {/* iPhone Frame */}
               <div className="relative bg-black rounded-3xl shadow-2xl overflow-hidden" style={{ aspectRatio: '9/19' }}>
                 {/* Notch */}
