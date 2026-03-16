@@ -205,7 +205,7 @@ export default async function Home() {
               <div className="absolute -top-6 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-yellow-400 to-orange-400 text-gray-900 px-6 py-2 rounded-full font-bold text-sm">
                 BEST VALUE
               </div>
-              <div className="text-7xl font-black mb-2 text-white">$399</div>
+              <div className="text-7xl font-black mb-2 text-white">$199</div>
               <div className="text-xl text-blue-100 mb-8">/month</div>
               <p className="text-blue-50 mb-10 text-lg font-semibold">🎉 14-day free trial — no credit card required</p>
 
