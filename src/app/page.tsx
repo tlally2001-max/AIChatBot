@@ -23,9 +23,9 @@ export default async function Home() {
 
           <div className="w-full px-4">
             <div className="max-w-7xl mx-auto">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center lg:order-none order-first">
               {/* Left Side - Copy */}
-              <div className="text-center lg:text-left">
+              <div className="text-center lg:text-left lg:order-none">
                 <div className="mb-6">
                   <span className="inline-block px-4 py-2 bg-blue-500/10 border border-blue-400/30 rounded-full text-blue-300 text-sm font-semibold">
                     AI Receptionist Platform
@@ -65,7 +65,7 @@ export default async function Home() {
               </div>
 
               {/* Right Side - Phone Mockup */}
-              <div className="flex justify-center lg:justify-end">
+              <div className="flex justify-center lg:justify-end lg:order-none order-last">
                 <Suspense fallback={<div className="flex justify-center lg:justify-end"><div className="w-80 h-96 bg-gray-700 rounded-3xl animate-pulse"></div></div>}>
                   <PhoneDemoPreview />
                 </Suspense>
