@@ -419,15 +419,15 @@ export function DemoHeroPage({
       <div className="bg-gradient-to-r from-blue-50 to-indigo-50 py-16 border-y border-gray-200">
         <div className="max-w-7xl mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-md transition-shadow">
+            <div className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-md transition-shadow text-center">
               <div className="text-5xl font-black text-gray-400 mb-2">40-60%</div>
               <p className="text-gray-700 font-bold text-lg">More Leads Captured</p>
             </div>
-            <div className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-md transition-shadow">
+            <div className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-md transition-shadow text-center">
               <div className="text-5xl font-black text-gray-400 mb-2">24/7</div>
               <p className="text-gray-700 font-bold text-lg">Availability — Never Misses a Lead</p>
             </div>
-            <div className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-md transition-shadow">
+            <div className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-md transition-shadow text-center">
               <div className="text-5xl font-black text-gray-400 mb-2">&lt;10 min</div>
               <p className="text-gray-700 font-bold text-lg">Book Now</p>
             </div>
