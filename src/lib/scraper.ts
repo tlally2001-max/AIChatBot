@@ -4,16 +4,32 @@ import { ScrapedData } from '@/types'
 const emailRegex = /[^\s@]+@[^\s@]+\.[^\s@]+/g
 const phoneRegex = /\+?1?\s*\(?([0-9]{3})\)?[\s.-]?([0-9]{3})[\s.-]?([0-9]{4})/g
 
+const BROWSER_HEADERS = {
+  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+  'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
+  'Accept-Language': 'en-US,en;q=0.9',
+  'Accept-Encoding': 'gzip, deflate, br',
+  'Cache-Control': 'no-cache',
+  'Pragma': 'no-cache',
+  'Sec-Ch-Ua': '"Not_A Brand";v="8", "Chromium";v="120", "Google Chrome";v="120"',
+  'Sec-Ch-Ua-Mobile': '?0',
+  'Sec-Ch-Ua-Platform': '"Windows"',
+  'Sec-Fetch-Dest': 'document',
+  'Sec-Fetch-Mode': 'navigate',
+  'Sec-Fetch-Site': 'none',
+  'Sec-Fetch-User': '?1',
+  'Upgrade-Insecure-Requests': '1',
+}
+
 async function fetchUrl(url: string): Promise<string> {
   const controller = new AbortController()
   const timeoutId = setTimeout(() => controller.abort(), 10000)
 
   try {
     const response = await fetch(url, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-      },
+      headers: BROWSER_HEADERS,
       signal: controller.signal,
+      redirect: 'follow',
     })
 
     if (!response.ok) throw new Error(`HTTP ${response.status}`)
@@ -197,16 +213,25 @@ export async function scrapeWebsite(url: string): Promise<ScrapedData> {
     let response
     try {
       response = await fetch(fullUrl, {
-        headers: {
-          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-        },
+        headers: BROWSER_HEADERS,
         signal: controller.signal,
+        redirect: 'follow',
       })
     } catch (fetchError) {
       clearTimeout(timeoutId)
       const errorMsg = fetchError instanceof Error ? fetchError.message : 'Unknown fetch error'
       console.error(`❌ Fetch error for ${fullUrl}: ${errorMsg}`)
-      throw new Error(`Network error: ${errorMsg}. Website may be blocking requests or unreachable.`)
+      // Return minimal data instead of throwing — let demo still be created
+      const domain = new URL(fullUrl).hostname.replace('www.', '')
+      return {
+        title: domain,
+        description: '',
+        headings: [],
+        contactPhone: undefined,
+        contactEmail: undefined,
+        address: undefined,
+        bodyText: `Business website: ${fullUrl}`,
+      }
     }
 
     clearTimeout(timeoutId)
@@ -214,7 +239,17 @@ export async function scrapeWebsite(url: string): Promise<ScrapedData> {
     console.log(`📊 Got response: ${response.status} ${response.statusText}`)
 
     if (!response.ok) {
-      throw new Error(`HTTP ${response.status}: ${response.statusText}`)
+      console.error(`❌ HTTP ${response.status} for ${fullUrl}`)
+      const domain = new URL(fullUrl).hostname.replace('www.', '')
+      return {
+        title: domain,
+        description: '',
+        headings: [],
+        contactPhone: undefined,
+        contactEmail: undefined,
+        address: undefined,
+        bodyText: `Business website: ${fullUrl}`,
+      }
     }
 
     const html = await response.text()
