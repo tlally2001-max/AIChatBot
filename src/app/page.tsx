@@ -77,15 +77,15 @@ export default async function Home() {
         <section className="bg-gradient-to-r from-blue-50 to-indigo-50 py-16 border-b-2 border-blue-100">
           <div className="max-w-7xl mx-auto px-4">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow">
+              <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow text-center">
                 <div className="text-5xl font-black text-transparent bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text">40-60%</div>
                 <p className="text-gray-700 mt-2 font-semibold text-lg">More Leads Captured</p>
               </div>
-              <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow">
+              <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow text-center">
                 <div className="text-5xl font-black text-transparent bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text">24/7</div>
                 <p className="text-gray-700 mt-2 font-semibold text-lg">Availability — Never Misses a Lead</p>
               </div>
-              <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow">
+              <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow text-center">
                 <div className="text-5xl font-black text-transparent bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text">&lt;10 min</div>
                 <p className="text-gray-700 mt-2 font-semibold text-lg">Live in Under 10 Minutes</p>
               </div>
