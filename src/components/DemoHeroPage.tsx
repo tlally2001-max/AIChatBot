@@ -279,195 +279,137 @@ export function DemoHeroPage({
             </div>
           </div>
 
-          {/* iPhone/Chat Interface - Below */}
-          <div className="flex justify-center">
-            <div className="relative w-80 md:w-96">
-              {/* iPhone Frame */}
-              <div className="relative bg-black rounded-3xl shadow-2xl overflow-hidden" style={{ aspectRatio: '9/19' }}>
-                {/* Notch */}
-                <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-40 h-7 bg-black rounded-b-3xl z-50"></div>
-
-                {/* Screen */}
-                <div className="bg-white h-full pt-8 overflow-hidden flex flex-col">
-                  {/* Status Bar */}
-                  <div className="bg-white h-5 flex items-center justify-between px-6 text-xs font-semibold text-gray-800">
-                    <span>6:37</span>
-                    <span>Safari</span>
+          {/* Interactive Demo - Below */}
+          <div className="w-full max-w-md mx-auto">
+            {/* Demo Card */}
+            <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
+              {/* Header */}
+              <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-4">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
+                    <span className="text-lg">🤖</span>
                   </div>
-
-                  {/* URL Bar */}
-                  <div className="bg-gray-100 px-3 py-2 mx-3 mt-2 rounded-lg text-xs text-gray-600 truncate border border-gray-200">
-                    {websiteUrl ? websiteUrl.replace('https://', '').replace('http://', '') : 'website.com'}
+                  <div>
+                    <p className="font-bold">Emma</p>
+                    <p className="text-blue-200 text-xs">AI Receptionist for {business.businessName}</p>
                   </div>
+                  <div className="ml-auto w-2 h-2 bg-green-400 rounded-full"></div>
+                </div>
 
-                  {/* Website Content */}
-                  <div className="flex-1 overflow-hidden relative bg-white">
-                    {websiteUrl ? (
-                      <iframe
-                        src={websiteUrl}
-                        className="w-full h-full border-0"
-                        title="Website Preview"
-                        sandbox="allow-scripts allow-popups allow-forms allow-same-origin"
-                      />
-                    ) : (
-                      <div className="flex items-center justify-center h-full bg-gray-50">
-                        <div className="text-center">
-                          <div className="text-4xl mb-2">🌐</div>
-                          <p className="text-xs text-gray-600">Website loading...</p>
+                {/* Mode Selector */}
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setDemoMode('chat')}
+                    className={`flex-1 py-2 px-3 rounded-lg text-sm font-bold transition-all ${
+                      demoMode === 'chat'
+                        ? 'bg-white text-blue-600'
+                        : 'bg-blue-500 text-white hover:bg-blue-400'
+                    }`}
+                  >
+                    💬 Chat
+                  </button>
+                  <button
+                    onClick={() => setDemoMode('voice')}
+                    className={`flex-1 py-2 px-3 rounded-lg text-sm font-bold transition-all ${
+                      demoMode === 'voice'
+                        ? 'bg-white text-blue-600'
+                        : 'bg-blue-500 text-white hover:bg-blue-400'
+                    }`}
+                  >
+                    🎤 Voice Call
+                  </button>
+                </div>
+              </div>
+
+              {/* Chat Mode */}
+              {demoMode === 'chat' ? (
+                <div className="flex flex-col" style={{ height: '400px' }}>
+                  {/* Chat Messages */}
+                  <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-gray-50">
+                    {messages.map((msg, i) => (
+                      <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                        <div
+                          className={`max-w-[80%] px-4 py-2.5 rounded-2xl text-sm leading-relaxed ${
+                            msg.role === 'user'
+                              ? 'bg-blue-600 text-white rounded-br-sm'
+                              : 'bg-white text-gray-900 rounded-bl-sm shadow-sm border border-gray-100'
+                          }`}
+                        >
+                          {msg.content}
+                        </div>
+                      </div>
+                    ))}
+                    {sending && (
+                      <div className="flex justify-start">
+                        <div className="bg-white px-4 py-3 rounded-2xl shadow-sm border border-gray-100">
+                          <div className="flex space-x-1.5">
+                            <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                            <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.15s' }}></div>
+                            <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.3s' }}></div>
+                          </div>
                         </div>
                       </div>
                     )}
                   </div>
 
-                  {/* Floating Chat Widget */}
-                  {chatOpen && (
-                    <div className="absolute bottom-4 right-4 w-72 bg-white rounded-2xl shadow-2xl overflow-hidden z-50 flex flex-col h-96">
-                      {/* Chat Header */}
-                      <div className="bg-green-600 text-white p-3">
-                        <div className="flex justify-between items-center mb-3">
-                          <div>
-                            <p className="font-bold text-sm">Emma</p>
-                            <p className="text-green-100 text-xs">AI Receptionist • Always Here</p>
-                          </div>
-                          <button
-                            onClick={() => setChatOpen(false)}
-                            className="text-white hover:text-green-100 text-lg font-bold"
-                          >
-                            ✕
-                          </button>
-                        </div>
-
-                        {/* Mode Selector */}
-                        <div className="flex gap-2">
-                          <button
-                            onClick={() => setDemoMode('chat')}
-                            className={`flex-1 py-1.5 px-2 rounded text-xs font-bold transition-all ${
-                              demoMode === 'chat'
-                                ? 'bg-white text-green-600'
-                                : 'bg-green-500 text-white hover:bg-green-700'
-                            }`}
-                          >
-                            💬 Chat
-                          </button>
-                          <button
-                            onClick={() => setDemoMode('voice')}
-                            className={`flex-1 py-1.5 px-2 rounded text-xs font-bold transition-all ${
-                              demoMode === 'voice'
-                                ? 'bg-white text-green-600'
-                                : 'bg-green-500 text-white hover:bg-green-700'
-                            }`}
-                          >
-                            🎤 Call
-                          </button>
-                        </div>
-                      </div>
-
-                      {/* Chat Mode */}
-                      {demoMode === 'chat' ? (
-                        <>
-                          {/* Chat Messages */}
-                          <div className="flex-1 overflow-y-auto p-3 space-y-3 bg-gray-50">
-                            {messages.map((msg, i) => (
-                              <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                                <div
-                                  className={`max-w-xs px-3 py-2 rounded-lg text-sm ${
-                                    msg.role === 'user'
-                                      ? 'bg-green-600 text-white rounded-br-none'
-                                      : 'bg-white text-gray-900 rounded-bl-none border border-gray-200'
-                                  }`}
-                                >
-                                  {msg.content}
-                                </div>
-                              </div>
-                            ))}
-                            {sending && (
-                              <div className="flex justify-start">
-                                <div className="bg-white px-3 py-2 rounded-lg border border-gray-200">
-                                  <div className="flex space-x-1">
-                                    <div className="w-1.5 h-1.5 bg-gray-500 rounded-full animate-bounce"></div>
-                                    <div className="w-1.5 h-1.5 bg-gray-500 rounded-full animate-bounce delay-100"></div>
-                                    <div className="w-1.5 h-1.5 bg-gray-500 rounded-full animate-bounce delay-200"></div>
-                                  </div>
-                                </div>
-                              </div>
-                            )}
-                          </div>
-
-                          {/* Chat Input */}
-                          <div className="border-t border-gray-200 p-2 bg-white">
-                            <div className="flex gap-2">
-                              <input
-                                type="text"
-                                value={input}
-                                onChange={e => setInput(e.target.value)}
-                                onKeyPress={e => e.key === 'Enter' && handleSend()}
-                                placeholder="Ask Emma anything..."
-                                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-green-500"
-                              />
-                              <button
-                                onClick={handleSend}
-                                disabled={sending || !input.trim()}
-                                className="bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white px-3 py-2 rounded-lg font-medium text-sm"
-                              >
-                                →
-                              </button>
-                            </div>
-                          </div>
-                        </>
-                      ) : (
-                        <>
-                          {/* Voice Mode */}
-                          <div className="flex-1 flex flex-col items-center justify-center p-6 bg-gradient-to-b from-green-50 to-white">
-                            <div className="text-6xl mb-4">🎤</div>
-                            <h3 className="text-xl font-bold text-gray-900 mb-2">Voice Conversation</h3>
-                            <p className="text-center text-gray-600 text-sm mb-6">
-                              Talk to Emma directly through your microphone. She'll answer questions and help you.
-                            </p>
-                            <button
-                              onClick={handleStartVoiceCall}
-                              disabled={voiceLoading}
-                              className="w-full px-4 py-3 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white font-bold rounded-lg transition-all flex items-center justify-center gap-2"
-                            >
-                              {voiceLoading ? (
-                                <>
-                                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                                  Starting...
-                                </>
-                              ) : (
-                                <>
-                                  🎤 Start Voice Chat
-                                </>
-                              )}
-                            </button>
-                            <p className="text-xs text-gray-500 mt-4 text-center">
-                              Click to start. Grant mic permission when prompted.
-                            </p>
-                          </div>
-                        </>
-                      )}
-                    </div>
-                  )}
-
-                  {/* Chat Bubble - Only show when chat not open */}
-                  {!chatOpen && (
-                    <div className="absolute bottom-4 right-4 z-40">
+                  {/* Chat Input */}
+                  <div className="border-t border-gray-200 p-3 bg-white">
+                    <div className="flex gap-2">
+                      <input
+                        type="text"
+                        value={input}
+                        onChange={e => setInput(e.target.value)}
+                        onKeyPress={e => e.key === 'Enter' && handleSend()}
+                        placeholder="Ask Emma anything..."
+                        className="flex-1 px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 bg-gray-50"
+                      />
                       <button
-                        onClick={() => setChatOpen(true)}
-                        className="relative bg-green-600 hover:bg-green-700 text-white rounded-full w-14 h-14 flex items-center justify-center font-bold text-2xl shadow-lg transition-all hover:scale-110"
+                        onClick={handleSend}
+                        disabled={sending || !input.trim()}
+                        className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 text-white px-4 py-3 rounded-xl font-medium text-sm transition-colors"
                       >
-                        💬
-                        {/* Notification Badge */}
-                        <div className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center border-2 border-white">
-                          1
-                        </div>
+                        Send
                       </button>
                     </div>
-                  )}
+                  </div>
                 </div>
-              </div>
+              ) : (
+                /* Voice Mode */
+                <div className="flex flex-col items-center justify-center p-8 bg-gradient-to-b from-slate-900 to-blue-950" style={{ height: '400px' }}>
+                  {/* Voice Orb */}
+                  <div className="relative w-28 h-28 mb-6">
+                    <div className="absolute inset-0 rounded-full bg-indigo-500/20 animate-ping" style={{ animationDuration: '2.5s' }}></div>
+                    <div className="absolute inset-0 rounded-full bg-indigo-600 shadow-2xl shadow-indigo-500/60"></div>
+                    <div className="absolute inset-1 rounded-full border-4 border-white/90 overflow-hidden">
+                      <div className="absolute inset-0 bg-indigo-600 flex items-center justify-center">
+                        <span className="text-4xl">🎤</span>
+                      </div>
+                    </div>
+                  </div>
 
-              {/* Bezel */}
-              <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-28 h-1 bg-black rounded-full"></div>
+                  <h3 className="text-xl font-bold text-white mb-2">Talk to Emma</h3>
+                  <p className="text-center text-gray-300 text-sm mb-6">
+                    She knows about {business.businessName} and can answer your questions live.
+                  </p>
+                  <button
+                    onClick={handleStartVoiceCall}
+                    disabled={voiceLoading}
+                    className="w-full max-w-xs px-6 py-4 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-500 text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2 text-lg"
+                  >
+                    {voiceLoading ? (
+                      <>
+                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        Starting...
+                      </>
+                    ) : (
+                      'Start Voice Call'
+                    )}
+                  </button>
+                  <p className="text-xs text-gray-400 mt-4 text-center">
+                    Grant mic permission when prompted.
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -476,7 +418,7 @@ export function DemoHeroPage({
       {/* Social Proof Section */}
       <div className="bg-gradient-to-r from-blue-50 to-indigo-50 py-16 border-y border-gray-200">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="grid grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-md transition-shadow">
               <div className="text-5xl font-black text-gray-400 mb-2">40-60%</div>
               <p className="text-gray-700 font-bold text-lg">More Leads Captured</p>
