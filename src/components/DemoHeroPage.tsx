@@ -280,7 +280,7 @@ export function DemoHeroPage({
           </div>
 
           {/* Right - Interactive Demo */}
-          <div className="w-full max-w-md mx-auto lg:mx-0 lg:ml-auto">
+          <div className="w-full max-w-md mx-auto">
             {/* Demo Card */}
             <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
               {/* Header */}

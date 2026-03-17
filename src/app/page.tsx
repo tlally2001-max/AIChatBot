@@ -63,7 +63,7 @@ export default async function Home() {
               </div>
 
               {/* Right Side - Phone Mockup */}
-              <div className="flex justify-center lg:justify-end">
+              <div className="flex justify-center">
                 <Suspense fallback={<div className="flex justify-center"><div className="w-80 h-96 bg-gray-700 rounded-3xl animate-pulse"></div></div>}>
                   <PhoneDemoPreview />
                 </Suspense>
