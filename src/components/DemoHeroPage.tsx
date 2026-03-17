@@ -229,9 +229,9 @@ export function DemoHeroPage({
 
       {/* Hero Section */}
       <div className="max-w-7xl mx-auto px-4 py-20">
-        <div className="flex flex-col gap-12">
-          {/* Text Content - Top, Centered */}
-          <div className="text-center max-w-2xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          {/* Left - Text Content */}
+          <div className="text-center lg:text-left">
             {/* Badge */}
             <div className="inline-block px-4 py-2 border border-blue-400 rounded-full text-blue-300 text-sm font-semibold mb-6">
               AI Receptionist Platform
@@ -279,8 +279,8 @@ export function DemoHeroPage({
             </div>
           </div>
 
-          {/* Interactive Demo - Below */}
-          <div className="w-full max-w-md mx-auto">
+          {/* Right - Interactive Demo */}
+          <div className="w-full max-w-md mx-auto lg:mx-0 lg:ml-auto">
             {/* Demo Card */}
             <div className="bg-white rounded-3xl shadow-2xl overflow-hidden">
               {/* Header */}
