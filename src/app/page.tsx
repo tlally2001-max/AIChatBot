@@ -57,7 +57,7 @@ export default async function Home() {
 
                 <PublicDemoForm />
 
-                <p className="text-sm text-gray-300 mt-3">
+                <p className="text-sm text-gray-900 bg-white/90 rounded-lg px-3 py-2 inline-block mt-3 mb-8">
                   Enter your website URL and see Emma live in ~15 seconds — no signup required.
                 </p>
               </div>
