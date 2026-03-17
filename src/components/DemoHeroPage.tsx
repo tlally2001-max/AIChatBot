@@ -239,7 +239,7 @@ export function DemoHeroPage({
 
             {/* Heading */}
             <h2 className="text-3xl md:text-7xl font-black text-white mb-6">
-              24/7 AI-Powered <span className="text-transparent bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text">Lead Capture</span>
+              Meet Your AI Employee: <span className="text-transparent bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text">Lead Capture</span>
             </h2>
 
             {/* Description */}
