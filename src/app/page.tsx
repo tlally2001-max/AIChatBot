@@ -55,11 +55,11 @@ export default async function Home() {
                   </li>
                 </ul>
 
-                <p className="text-sm text-gray-900 bg-white/90 rounded-lg px-3 py-2 inline-block mb-6">
+                <PublicDemoForm />
+
+                <p className="text-sm text-gray-300 mt-3">
                   Enter your website URL and see Emma live in ~15 seconds — no signup required.
                 </p>
-
-                <PublicDemoForm />
               </div>
 
               {/* Right Side - Phone Mockup */}
